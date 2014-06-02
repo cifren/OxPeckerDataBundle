@@ -18,7 +18,7 @@ pp_stockbook_reports:
     packsizeid: 10
     catDescr: "this is a test"
     reportDate: "2014-01-01"
-    
+
   -
     pp_stockbook_id: 2
     stockbookDescr: "coleslaw crew"
@@ -38,5 +38,3 @@ pp_stockbook_reports:
     packsizeid: 10
     catDescr: "this is another test"
     reportDate: "2014-01-02"
-    
-    

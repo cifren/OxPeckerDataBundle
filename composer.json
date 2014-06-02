@@ -1,0 +1,22 @@
+{
+    "name": "earls/oxpecker-data-bundle",
+    "type": "symfony-bundle",
+    "description": "Create quickly report tables with OxPeckerData",
+    "keywords": ["reporting", "report", "data"],
+    "homepage": "https://github.com/earls/OxPeckerDataBundle",
+    "license": "MIT",       
+    "minimum-stability": "dev", 
+    "authors": [
+        {
+            "name": "Dev earls",
+            "homepage": "http:\\www.earls.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload":     {
+        "psr-0": { "Earls\\OxPeckerDataBundle": "" }
+    },
+    "target-dir": "Earls/OxPeckerDataBundle"
+}

@@ -7,71 +7,73 @@ use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Pp3\DataTierBundle\Reports\InventoryReport;
 use Earls\OxPeckerDataBundle\Command\ListAllCommand;
 
-
 class ReportBuilderTest extends \PHPUnit_Framework_TestCase
 {
     private $builder = null;
-    
+
     private $report = null;
-    
+
     private $adapter = null;
-    
-    protected function setUp() {
+
+    protected function setUp()
+    {
         $this->builder = new ReportBuilder();
     }
-    
-    
-    private function getAdapter() {
+
+    private function getAdapter()
+    {
         $cmd = $this->builder;
         $executeFunction = $this->getMethod('getConnectionAdapter');
+
         return $executeFunction->invokeArgs($cmd, array());
     }
-    
-    private function getReport() {
-        return new InventoryReport();    
+
+    private function getReport()
+    {
+        return new InventoryReport();
     }
-    
-    public function testGetConnectionAdapter() {
-        
+
+    public function testGetConnectionAdapter()
+    {
         $adapter = $this->getAdapter();
-        
+
         $this->assertNotNull($adapter);
         $this->assertTrue($adapter instanceof ConnectionAdapter);
-        
+
         $this->adapter = $adapter;
     }
-    
-    public function testGetReport() {
+
+    public function testGetReport()
+    {
         $cmd = $this->builder;
         $executeFunction = $this->getMethod('getReport');
-        
-        try{
+
+        try {
             $executeFunction->invokeArgs($cmd, array('invalidreportype'));
             $this->fail("test should fail on invalid report type\r\n");
-        }catch(\Exception $e) {
-            
+        } catch (\Exception $e) {
+
         }
         $report =  $executeFunction->invokeArgs($cmd, array('InventoryReport'));
-        
+
         $this->assertNotNull($report);
         $this->assertTrue($report instanceof InventoryReport);
     }
-    
+
     /**
      * @depends testGetConnectionAdapter
      */
-    public function testGetCommand() {
-        
+    public function testGetCommand()
+    {
         $cmd = $this->builder;
         $executeFunction = $this->getMethod('getCommand');
         $result = $executeFunction->invokeArgs($cmd, array('list', $this->getAdapter(), $this->getReport()));
-        
+
         $this->assertNotNull($result);
         $this->assertTrue($result instanceof ListAllCommand);
-        
+
     }
-    
-    
+
     /**
      * getMethod - used for exposing protected/private methods within a class for testing outside the class
      *              *** this method could be used in many test class files ***
@@ -101,6 +103,5 @@ class ReportBuilderTest extends \PHPUnit_Framework_TestCase
     {
         return new \ReflectionClass('Earls\OxPeckerDataBundle\Builders\ReportBuilder');
     }
-    
-}
 
+}
