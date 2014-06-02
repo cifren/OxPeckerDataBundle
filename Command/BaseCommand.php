@@ -2,33 +2,37 @@
 
 namespace Earls\OxPeckerDataBundle\Command;
 
-use Pp3\DataTierBundle\Reports\BaseReport;
-use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
-use Monolog\Logger;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Earls\OxPeckerDataBundle\Command\BaseCommand
+ * 
  * BaseCommand  Base class for all Command objects
  *
  * @author  Dave Meikle
  * @date    2014-05-21
  */
-abstract class BaseCommand
+abstract class BaseCommand extends ContainerAwareCommand
 {
-    protected $connection = null;
 
-    protected $logger = null;
+    protected $typeCommand;
 
-    protected $report = null;
-
-    public function __construct(ConnectionAdapter $connection, BaseReport $report, Logger $logger)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->connection = $connection;
-        $this->logger = $logger;
-        $this->report = $report;
+        $container = $this->getContainer();
+        $dataTierManager = $container->get('oxpecker.datatier.manager');
+
+        $dataTierConfig = $dataTierManager->getDataTierConfig($input->getArgument('namedatatier'));
+
+        if (!$dataTierConfig) {
+            throw new \InvalidArgumentException(sprintf('No data tier configuration has been find with name \'%s\' ', $input->getArgument('namedatatier')));
+        }
+
+        $dataBuilder = $this->getContainer()->get('oxpecker.data.builder');
+
+        $dataBuilder->execute($this->typeCommand, $dataTierConfig, $input->getArgument('args'));
     }
 
-    /**
-     * main entry point for the class
-     */
-    abstract public function execute(array $params);
 }

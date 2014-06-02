@@ -2,17 +2,26 @@
 
 namespace Earls\OxPeckerDataBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Earls\OxPeckerDataBundle\Command\BaseCommand;
 
+/**
+ * Earls\OxPeckerDataBundle\Command\DeleteCommand
+ */
 class DeleteCommand extends BaseCommand
 {
-    public function execute(array $params)
+
+    protected $typeCommand = 'delete';
+
+    protected function configure()
     {
-        $query = $this->report->toSQLDelete($params);
-
-        $this->connection->query($query);
-
-        //no other work to perform
+        parent::configure();
+        $this
+                ->setName('oxpecker:delete')
+                ->setDescription('Import command from your data tier config')
+                ->addArgument('namereport', InputArgument::REQUIRED, 'Which data tier config do you want execute')
+                ->addArgument('args', InputArgument::IS_ARRAY, 'Add all arguments this command needs');
+        ;
     }
 
 }
