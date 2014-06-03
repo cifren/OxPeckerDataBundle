@@ -24,7 +24,7 @@ class EarlsOxPeckerDataExtension extends Extension
 
     public function getAlias()
     {
-        return 'earls_oxpecker_datatier';
+        return 'earls_ox_pecker_data';
     }
 
 }

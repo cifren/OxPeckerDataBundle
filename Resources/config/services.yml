@@ -1,8 +1,7 @@
 parameters:
-    oxpecker.data.builder.class:      Earls\OxPeckerDataBundle\Builders\ReportBuilder
+    oxpecker.data.builder.class:        Earls\OxPeckerDataBundle\Builders\ReportBuilder
     oxpecker.command.import.class:      Earls\OxPeckerDataBundle\Command\ImportCommand
     oxpecker.command.delete.class:      Earls\OxPeckerDataBundle\Command\DeleteCommand
-    
     
 services:
     oxpecker.data.builder:

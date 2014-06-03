@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('earls_oxpecker_datatier');
+        $rootNode = $treeBuilder->root('earls_ox_pecker_data');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
