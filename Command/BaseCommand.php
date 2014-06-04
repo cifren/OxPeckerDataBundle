@@ -26,7 +26,6 @@ abstract class BaseCommand extends ContainerAwareCommand
         $container = $this->getContainer();
 
         $dataTierConfig = $container->get($input->getArgument('namedatatier'));
-
         if (!$dataTierConfig) {
             throw new \InvalidArgumentException(sprintf('No data tier configuration has been find with name \'%s\' ', $input->getArgument('namedatatier')));
         } elseIf (!$dataTierConfig instanceof SQLInterface) {
@@ -37,8 +36,8 @@ abstract class BaseCommand extends ContainerAwareCommand
 
         if ($dataTierConfig->getConnection() && $dataTierConfig->getConnection() instanceof ConnectionAdapterInterface) {
             $dataBuilder->setConnection($dataTierConfig->getConnection());
-        }else{
-            $this->getContainer()->get('oxpecker.data.connection');
+        } else {
+            $dataBuilder->setConnection($this->getContainer()->get('oxpecker.connection'));
         }
 
         $dataBuilder->execute($this->typeCommand, $dataTierConfig, $input->getArgument('args'));

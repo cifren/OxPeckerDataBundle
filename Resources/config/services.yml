@@ -6,4 +6,6 @@ parameters:
 services:
     oxpecker.data.builder:
         class:      %oxpecker.data.builder.class%
-    
+        
+    oxpecker.connection:    "@doctrine.dbal.default_connection"
+        
