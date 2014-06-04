@@ -19,11 +19,6 @@
     "autoload":     {
         "psr-0": { "Earls\\OxPeckerDataBundle": "" }
     },
-    "target-dir": "Earls/OxPeckerDataBundle",    
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/earls/OxPeckerData.git"
-        }
-    ]
+    "minimum-stability": "dev",
+    "target-dir": "Earls/OxPeckerDataBundle"
 }
