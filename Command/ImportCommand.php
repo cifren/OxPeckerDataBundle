@@ -11,8 +11,6 @@ use Earls\OxPeckerDataBundle\Command\BaseCommand;
 class ImportCommand extends BaseCommand
 {
 
-    protected $typeCommand = 'import';
-
     protected function configure()
     {
         parent::configure();
@@ -22,6 +20,11 @@ class ImportCommand extends BaseCommand
                 ->addArgument('namedatatier', InputArgument::REQUIRED, 'Which data tier config do you want execute')
                 ->addArgument('args', InputArgument::IS_ARRAY, 'Add all arguments this command needs');
         ;
+    }
+
+    protected function getCommandType()
+    {
+        return 'import';
     }
 
 }

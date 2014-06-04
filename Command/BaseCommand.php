@@ -19,8 +19,6 @@ use Earls\OxPeckerData\Database\ConnectionAdapterInterface;
 abstract class BaseCommand extends ContainerAwareCommand
 {
 
-    protected $typeCommand;
-
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
@@ -40,7 +38,15 @@ abstract class BaseCommand extends ContainerAwareCommand
             $dataBuilder->setConnection($this->getContainer()->get('oxpecker.connection'));
         }
 
-        $dataBuilder->execute($this->typeCommand, $dataTierConfig, $input->getArgument('args'));
+        if(!$this->getCommandType()){
+            throw new \InvalidArgumentException(sprintf('Command needs a type'));
+        }
+        $dataBuilder->execute($this->getCommandType(), $dataTierConfig, $input->getArgument('args'));
+    }
+
+    protected function getCommandType()
+    {
+        return null;
     }
 
 }
