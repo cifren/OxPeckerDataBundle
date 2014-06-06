@@ -3,7 +3,6 @@
 namespace Earls\OxPeckerDataBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
-use Earls\OxPeckerDataBundle\Command\BaseCommand;
 
 /**
  * Earls\OxPeckerDataBundle\Command\DeleteCommand

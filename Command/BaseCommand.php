@@ -10,7 +10,7 @@ use Earls\OxPeckerData\Database\ConnectionAdapterInterface;
 
 /**
  * Earls\OxPeckerDataBundle\Command\BaseCommand
- * 
+ *
  * BaseCommand  Base class for all Command objects
  *
  * @author  Dave Meikle
@@ -38,7 +38,7 @@ abstract class BaseCommand extends ContainerAwareCommand
             $dataBuilder->setConnection($this->getContainer()->get('oxpecker.connection'));
         }
 
-        if(!$this->getCommandType()){
+        if (!$this->getCommandType()) {
             throw new \InvalidArgumentException(sprintf('Command needs a type'));
         }
         $dataBuilder->execute($this->getCommandType(), $dataTierConfig, $input->getArgument('args'));
