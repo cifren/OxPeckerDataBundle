@@ -2,11 +2,12 @@
 
 namespace Earls\OxPeckerDataBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Earls\OxPeckerData\Report\SQLInterface;
 use Earls\OxPeckerData\Database\ConnectionAdapterInterface;
+use Earls\OxPeckerDataBundle\QueueManager\CommandQueue;
+use Earls\OxPeckerDataBundle\QueueManager\QueueManagerInterface;
 
 /**
  * Earls\OxPeckerDataBundle\Command\BaseCommand
@@ -16,10 +17,9 @@ use Earls\OxPeckerData\Database\ConnectionAdapterInterface;
  * @author  Dave Meikle
  * @date    2014-05-21
  */
-abstract class BaseCommand extends ContainerAwareCommand
+abstract class BaseCommand extends CommandQueue implements QueueManagerInterface
 {
-
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function executeCommand(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
 

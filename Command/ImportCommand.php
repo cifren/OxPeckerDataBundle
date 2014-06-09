@@ -22,7 +22,7 @@ class ImportCommand extends BaseCommand
         ;
     }
 
-    protected function getCommandType()
+    public function getCommandType()
     {
         return 'import';
     }
