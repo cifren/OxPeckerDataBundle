@@ -2,15 +2,13 @@
 
 namespace Earls\OxPeckerDataBundle\Command;
 
-use Earls\OxPeckerDataBundle\Command\BaseCommand;
-
 /**
  * ListAllCommand   retrieves a list based on supplied parameters
  *
  * @author  Dave Meikle
  * @date    2014-05-21
  */
-class ListAllCommand extends BaseCommand
+class ListAll extends BaseCommand
 {
 
     /**
