@@ -41,12 +41,30 @@ abstract class BaseCommand extends ContainerAwareCommand
         if (!$this->getCommandType()) {
             throw new \InvalidArgumentException(sprintf('Command needs a type'));
         }
-        $dataBuilder->execute($this->getCommandType(), $dataTierConfig, $input->getArgument('args'));
+
+        $args = $this->formatArguments($input->getArgument('args'));
+
+        $dataBuilder->execute($this->getCommandType(), $dataTierConfig, $args);
     }
 
     protected function getCommandType()
     {
         return null;
+    }
+
+    protected function formatArguments(array $args)
+    {
+        $formatedArgs = array();
+        foreach ($args as $arg) {
+            $argumentExploded = explode('=', $arg);
+            //ignore argument without '=' sign
+            if (count($argumentExploded) < 2) {
+                continue;
+            }
+            $formatedArgs[$argumentExploded[0]] = $argumentExploded[1];
+        }
+
+        return $formatedArgs;
     }
 
 }
