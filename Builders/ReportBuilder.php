@@ -12,13 +12,14 @@ use Earls\OxPeckerDataBundle\Command\ImportCommand;
 use Earls\OxPeckerDataBundle\Database\DBConnection;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Earls\OxPeckerDataBundle\Database\StandardDBConnectionAdapter;
-use Earls\OxPeckerDataBundle\Database\DoctrineDBConnectionAdapter;
+use Earls\OxPeckerDataBundle\Database\DoctrineConnectionAdapter;
 
 
 use Pp3\DataTierBundle\Reports\BaseReport;
 use Pp3\DataTierBundle\Reports\InventoryReport;
 use Pp3\DataTierBundle\Reports\IngredientUsageReport;
 
+use Doctrine\ORM\EntityManager;
 
 /**
  * class ReportBuilder  this is the 'game console' - the main executable for the ReportBuilder module.
@@ -36,6 +37,8 @@ class ReportBuilder
     const IMPORT_ACTION = 'import';
     const LIST_ACTION = 'list';
     
+    private $connectionAdapter = null;
+    
     private $connection = null;
     
     public function __construct() {
@@ -47,19 +50,18 @@ class ReportBuilder
      * 
      * @param Object    the database connection to use
      */
-    private function getConnectionAdapter($connString = '', $conn = null) {
-        if(is_null($this->connection)) {
-            if(is_null($conn)) {
-                $this->connection = new StandardDBConnectionAdapter(new DBConnection($connString));
-            }elseif('doctrine' == $conn){
-                $this->connection = new DoctrineDBConnectionAdapter($connString);
-            }
+    private function getConnectionAdapter() {
+        
+        if(is_null($this->connectionAdapter)) {
+            $this->connectionAdapter = new DoctrineConnectionAdapter($this->connection);
         }         
 
-        return $this->connection;
+        return $this->connectionAdapter;
     }
     
-    
+    private function setConnection($conn) {
+        $this->connection = $conn;
+    }
     
     /**
      * getReport    instantiates the report object
@@ -102,11 +104,15 @@ class ReportBuilder
      *                              db name and the IP since this is a dev IP.
      * @param string connection     the name of database connection to use - a placeholder in case we decide to let doctrine run our big SQL statements
      */
-    public function handleRequest($action, array $params, $reportType, $connString = '', $connection = null) {
+    public function handleRequest($action, array $params, $reportType, $connection = null) {
+       //set the connection and we'll figure out our adapter once we need it
+        $this->setConnection($connection);
+       
+       
         $this->logger->addInfo('ReportBuilder::handleRequest requesting Command object');
         $cmd = $this->getCommand(
                                     $action, 
-                                    $this->getConnectionAdapter($connString, $connection), 
+                                    $this->getConnectionAdapter(), 
                                     $this->getReport($reportType)
                                  );
         

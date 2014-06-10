@@ -7,6 +7,7 @@ use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Pp3\DataTierBundle\Reports\InventoryReport;
 use Earls\OxPeckerDataBundle\Command\ListAllCommand;
 
+include_once ('app/AppKernel.php');
 
 class ReportBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +21,23 @@ class ReportBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder = new ReportBuilder();
     }
     
+    public function testHandlerRequest() {
+        $cmd = $this->builder;
+        
+        $connection = $this->createDoctrineConnection();
+        $action = 'import';
+        $params= array('date' => '2014-03-01');
+        $reportType = 'IngredientUsage';
+        $cmd->handleRequest($action, $params, $reportType, $connection);
+    }
     
     private function getAdapter() {
         $cmd = $this->builder;
+        //first we pass it a connection
+        $executeFunction = $this->getMethod('setConnection');
+        $executeFunction->invokeArgs($cmd, array($this->createDoctrineConnection()));
+        
+        //now we get the adapter back
         $executeFunction = $this->getMethod('getConnectionAdapter');
         return $executeFunction->invokeArgs($cmd, array());
     }
@@ -43,6 +58,10 @@ class ReportBuilderTest extends \PHPUnit_Framework_TestCase
     
     public function testGetReport() {
         $cmd = $this->builder;
+        //first we pass it a connection
+        $executeFunction = $this->getMethod('setConnection');
+        $executeFunction->invokeArgs($cmd, array($this->createDoctrineConnection()));
+        
         $executeFunction = $this->getMethod('getReport');
         
         try{
@@ -100,6 +119,26 @@ class ReportBuilderTest extends \PHPUnit_Framework_TestCase
     protected function getReflectionClass()
     {
         return new \ReflectionClass('Earls\OxPeckerDataBundle\Builders\ReportBuilder');
+    }
+    
+    /**
+     * createDoctrineConnection     since doctrine likes to be instantiated from the kernel's container
+     *                              we load->boot the kernel, and get the entity manager from the container.
+     *                              From there we are actually referencing the EM as the connection object
+     *                              but we have hidden that from the user in the adapter interface
+     */
+    private function createDoctrineConnection() {
+        $kernel = new \AppKernel(
+            isset($options['config']) ? $options['config'] : 'dev',
+            isset($options['debug']) ? (boolean) $options['debug'] : true
+            );       
+        $kernel->boot(); 
+        $dbName = 'earls';
+        $connection = $kernel->getContainer()->get('doctrine')->getManager($dbName);    
+        $connection->getConfiguration()->setSQLLogger(null);
+        
+        return $connection;
+                    
     }
     
 }

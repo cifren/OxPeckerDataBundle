@@ -6,19 +6,12 @@ namespace Earls\OxPeckerDataBundle\Database;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Pp3\DataTierBundle\Configuration\ReportConfiguration;
+use Doctrine\ORM\EntityManager;
 
 include_once ('app/AppKernel.php');
 
 class DoctrineConnectionAdapter extends ConnectionAdapter
 {
-    
-    protected $host = '';
-
-    protected $user = '';
-
-    protected $pass = '';
-
-    protected $db = '';
     
     /**
      * constructor
@@ -28,18 +21,32 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
      * 
      * @tutorial        new DBConnection('14.100.3.44|dbname|username|password')
      */
-    public function __construct($connectionString = null) {
-        if(!is_null($connectionString) && strlen($connectionString) > 0) {
-            list(
-                $this->host,
-                $this->db,
-                $this->user,
-                $this->pass            
-            ) = explode('|', $connectionString);
-        }
-        
-        $this->createDoctrineConnection();
-    }
+     public function __construct(EntityManager $em) {
+         $this->connection = $em;
+         
+         $this->connection->getConfiguration()->setSQLLogger(null);
+     }
+     
+     /**
+     * constructor
+     * 
+     * @param string    the connection string - a pipe delimited list of parameters, intended to be
+     *                  simple enough to create from a command line
+     * 
+     * @tutorial        new DBConnection('14.100.3.44|dbname|username|password')
+     */
+    // public function __construct($connectionString = null) {
+        // if(!is_null($connectionString) && strlen($connectionString) > 0) {
+            // list(
+                // $this->host,
+                // $this->db,
+                // $this->user,
+                // $this->pass            
+            // ) = explode('|', $connectionString);
+        // }
+//         
+        // $this->createDoctrineConnection();
+    // }
     
     /**
      * query -  used as an adapter method to hide the possible different uses of the internal
@@ -58,11 +65,18 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
             
            $stmt = $this->connection->getConnection()->prepare($queryString);
            $stmt->execute();
-           $result = $stmt->fetchAll();
-          
+           $command = strtolower(substr($queryString,0,6));
+           
+           if( $command == 'update' || $command == 'insert' || $command == 'delete') {            
+               $result = true;
+           } else {
+               $result = $stmt->fetchAll();
+           }         
+            
         }catch(\Exception $e){
             $result = $e->getMessage();
             $this->connection->rollback();
+           
             return $result;
         }        
         $this->connection->commit();
