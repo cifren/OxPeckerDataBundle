@@ -1,9 +1,9 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Command;
+namespace Earls\OxPeckerDataBundle\Commands;
 
 
-use Earls\OxPeckerDataBundle\Command\BaseCommand;
+use Earls\OxPeckerDataBundle\Commands\BaseCommand;
 
 /**
  * ListAllCommand   retrieves a list based on supplied parameters

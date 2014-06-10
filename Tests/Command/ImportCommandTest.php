@@ -2,7 +2,7 @@
 
 namespace Earls\OxPeckerDataBundle\Tests\Command;
 
-use Earls\OxPeckerDataBundle\Command\ImportCommand;
+use Earls\OxPeckerDataBundle\Commands\ImportCommand;
 use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
 use Pp3\DataTierBundle\Reports\IngredientUsageReport;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;

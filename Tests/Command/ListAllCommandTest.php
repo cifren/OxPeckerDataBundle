@@ -2,7 +2,7 @@
 
 namespace Earls\OxPeckerDataBundle\Tests\Command;
 
-use Earls\OxPeckerDataBundle\Command\ListAllCommand;
+use Earls\OxPeckerDataBundle\Commands\ListAllCommand;
 use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
 use Pp3\DataTierBundle\Reports\InventoryReport;
 use Earls\OxPeckerDataBundle\Database\StandardDBConnectionAdapter;

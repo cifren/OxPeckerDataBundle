@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Command;
+namespace Earls\OxPeckerDataBundle\Commands;
 
 use Pp3\DataTierBundle\Reports\BaseReport;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;

@@ -5,7 +5,7 @@ namespace Earls\OxPeckerDataBundle\Tests\Builders;
 use Earls\OxPeckerDataBundle\Builders\ReportBuilder;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Pp3\DataTierBundle\Reports\InventoryReport;
-use Earls\OxPeckerDataBundle\Command\ListAllCommand;
+use Earls\OxPeckerDataBundle\Commands\ListAllCommand;
 
 include_once ('app/AppKernel.php');
 

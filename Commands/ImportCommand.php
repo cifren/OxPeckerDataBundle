@@ -1,11 +1,11 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Command;
+namespace Earls\OxPeckerDataBundle\Commands;
 
 
-use Earls\OxPeckerDataBundle\Command\BaseCommand;
+use Earls\OxPeckerDataBundle\Commands\BaseCommand;
 use Earls\OxPeckerDataBundle\Exceptions\HandlerNotImplementedException;
-use Earls\OxPeckerDataBundle\Command\DeleteCommand;
+use Earls\OxPeckerDataBundle\Commands\DeleteCommand;
 
 /**
  * ImportCommand   retrieves a list based on supplied parameters

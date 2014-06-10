@@ -5,9 +5,9 @@ namespace Earls\OxPeckerDataBundle\Builders;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Earls\OxPeckerDataBundle\Exceptions\CommandNotFoundException;
-use Earls\OxPeckerDataBundle\Command\DeleteCommand;
-use Earls\OxPeckerDataBundle\Command\ListAllCommand;
-use Earls\OxPeckerDataBundle\Command\ImportCommand;
+use Earls\OxPeckerDataBundle\Commands\DeleteCommand;
+use Earls\OxPeckerDataBundle\Commands\ListAllCommand;
+use Earls\OxPeckerDataBundle\Commands\ImportCommand;
 
 use Earls\OxPeckerDataBundle\Database\DBConnection;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
