@@ -4,6 +4,7 @@ namespace Earls\OxPeckerDataBundle\Tests\Builders;
 
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Pp3\DataTierBundle\Configuration\ReportConfiguration;
 
 use Earls\OxPeckerDataBundle\Builders\ConsoleReportBuilderList;
 
@@ -29,13 +30,17 @@ class ConsoleReportBuilderListAllTest extends \PHPUnit_Framework_TestCase
         // mock the Kernel or create one depending on your needs
         $application = new Application($this->kernel);
         $application->add(new ConsoleReportBuilderList());
-
+        $reportConfig = new ReportConfiguration('dev', 'test');
+        
         $command = $application->find('reportbuilder:list');
         $commandTester = new CommandTester($command);
         $result = $commandTester->execute(
             array(
                 'reportType'    => 'InventoryReport',
+                'connstring' => $reportConfig->toString(),
+                'connection' => 'doctrine',
                 'parameters'  => array("reportDate >= '2014-01-01'", "reportDate <= current_date()")
+            
             )
         );
 

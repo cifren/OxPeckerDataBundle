@@ -5,14 +5,16 @@ namespace Earls\OxPeckerDataBundle\Tests\Command;
 use Earls\OxPeckerDataBundle\Database\DoctrineConnectionAdapter;
 use Earls\OxPeckerDataBundle\Database\DBConnection;
 use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
- 
+use Pp3\DataTierBundle\Configuration\ReportConfiguration;
 
 class DoctrineConnectionTest extends BaseTestCommand
 {
        
     
     public function testQuery() {
-        $conn = new DoctrineConnectionAdapter();
+        $reportConfig = new ReportConfiguration('dev', 'test');
+        
+        $conn = new DoctrineConnectionAdapter($reportConfig->toString());
         $result = $conn->query('select * from pp_stockbook_reports');
          
         $this->assertNotNull($result);

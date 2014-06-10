@@ -20,27 +20,28 @@ class ConsoleReportBuilderList extends ConsoleReportBuilder
             ->setName('reportbuilder:list')
             ->setDescription('list a report')
             ->addArgument('reportType', InputArgument::REQUIRED, 'What type of report do you want to import?')
-            ->addArgument('parameters', InputArgument::IS_ARRAY, 'Please specify an array of parameters')
-            ->addOption('connection', null, InputArgument::OPTIONAL, 'If not set, will use the default DBConnection class');
+            ->addArgument('connstring', InputArgument::REQUIRED, 'need a connection string')
+            ->addArgument('connection', InputArgument::REQUIRED, 'If not set, will use the default DBConnection class')
+            ->addArgument('parameters', InputArgument::IS_ARRAY, 'Please specify an array of parameters');
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
+     
         $builder = new ReportBuilder();
         
         $reportType = $input->getArgument('reportType');
         $params = $input->getArgument('parameters');
-        $connection = $input->getOption('connection');
-       
+        $connstring = $input->getArgument('connstring');
+        $connection = $input->getArgument('connection');
         if(isset($connection)) {
             $connection = null;
         }
-        $result = $builder->handleRequest('list', $params, $reportType, $connection);
+        $result = $builder->handleRequest('list', $params, $reportType, $connstring, $connection);
         
         
-print_r($result);
+
         //$output->writeln($result);
     }
 }

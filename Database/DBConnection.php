@@ -11,16 +11,14 @@ namespace Earls\OxPeckerDataBundle\Database;
 class DBConnection
 {
     
-//'mysql://point:jhj@nP@10.100.2.85/earls'
 
-    // change these values
-    protected $host = '10.100.2.85';
+    protected $host = '';//'10.100.2.85';
 
-    protected $user = 'point';
+    protected $user = '';//'point';
 
-    protected $pass = 'jhj@nP';
+    protected $pass = '';//'jhj@nP';
 
-    protected $db ='test'; //by default we will point to a test db if no concept name is provided
+    protected $db = '';//'test'; //by default we will point to a test db if no concept name is provided
 
     private $lastQuery='';
 

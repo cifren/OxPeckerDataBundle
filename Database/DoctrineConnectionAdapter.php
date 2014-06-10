@@ -5,21 +5,20 @@ namespace Earls\OxPeckerDataBundle\Database;
 //use Doctrine\ORM\Query\ResultSetMapping;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Pp3\DataTierBundle\Configuration\ReportConfiguration;
 
 include_once ('app/AppKernel.php');
 
 class DoctrineConnectionAdapter extends ConnectionAdapter
 {
     
-    // change these values
-//'mysql://point:jhj@nP@10.100.2.85/earls'
-    protected $host = '10.100.2.85';
+    protected $host = '';
 
-    protected $user = 'point';
+    protected $user = '';
 
-    protected $pass = 'jhj@nP';
+    protected $pass = '';
 
-    protected $db = 'test';
+    protected $db = '';
     
     /**
      * constructor
@@ -27,7 +26,7 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
      * @param string    the connection string - a pipe delimited list of parameters, intended to be
      *                  simple enough to create from a command line
      * 
-     * @tutorial        new DBConnection('10.100.2.85|earlsus|point|jhj@nP')
+     * @tutorial        new DBConnection('14.100.3.44|dbname|username|password')
      */
     public function __construct($connectionString = null) {
         if(!is_null($connectionString) && strlen($connectionString) > 0) {
