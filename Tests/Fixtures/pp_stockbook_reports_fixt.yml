@@ -1,0 +1,42 @@
+pp_stockbook_reports:
+  -
+    pp_stockbook_id: 1
+    stockbookDescr: "cabbage patch dolls"
+    weekId: 351
+    storeId: 1
+    defaultFgMeasurePacksizeId: 1
+    measureAliasId: 1
+    RptExPacksize: 1
+    d1Ct: 1
+    d2Ct: 2
+    d3Ct: 3
+    d4Ct: 4
+    d5Ct: 5
+    d6Ct: 6
+    d7Ct: 7
+    totalCt: 100
+    packsizeid: 10
+    catDescr: "this is a test"
+    reportDate: "2014-01-01"
+    
+  -
+    pp_stockbook_id: 2
+    stockbookDescr: "coleslaw crew"
+    weekId: 351
+    storeId: 1
+    defaultFgMeasurePacksizeId: 1
+    measureAliasId: 1
+    RptExPacksize: 1
+    d1Ct: 1
+    d2Ct: 2
+    d3Ct: 3
+    d4Ct: 4
+    d5Ct: 5
+    d6Ct: 6
+    d7Ct: 7
+    totalCt: 100
+    packsizeid: 10
+    catDescr: "this is another test"
+    reportDate: "2014-01-02"
+    
+    
