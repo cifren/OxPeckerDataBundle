@@ -31,7 +31,7 @@ abstract class BaseCommand extends ContainerAwareCommand
             throw new \InvalidArgumentException(sprintf('Service has been found but the class is not an instance of \'Earls\OxPeckerData\Report\SQLInterface\''));
         }
 
-        if ($input->getArgument('args')[0] == 'help') {
+        if (isset($input->getArgument('args')[0]) && $input->getArgument('args')[0] == 'help') {
             $this->helpDisplay($input->getArgument('namedatatier'), $dataTierConfig->setParamsMapping(), $output);
             return true;
         }
