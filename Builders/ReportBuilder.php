@@ -99,10 +99,7 @@ class ReportBuilder
      * @param string action         'import' ...'delete'... etc.
      * @param array  params         the parameters to use
      * @param string reportType     the type of report to run
-     * @param string connString     the connection string parameters, pipe delimited. if not specified, default conn params will be used
-     *                              typical connstring format:  '10.100.2.85|earls|point|jhj@nP' - the only thing that really needs to change is the
-     *                              db name and the IP since this is a dev IP.
-     * @param string connection     the name of database connection to use - a placeholder in case we decide to let doctrine run our big SQL statements
+     * @param ojbect connection     the connection we will use, hidden inside an AdapterClass to hide the implementation from the rest of the system
      */
     public function handleRequest($action, array $params, $reportType, $connection = null) {
        //set the connection and we'll figure out our adapter once we need it
