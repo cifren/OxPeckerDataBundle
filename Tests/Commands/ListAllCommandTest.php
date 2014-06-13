@@ -1,11 +1,11 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Tests\Command;
+namespace Earls\OxPeckerDataBundle\Tests\Commands;
 
 use Earls\OxPeckerDataBundle\Commands\ListAllCommand;
-use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
+use Earls\OxPeckerDataBundle\Tests\Commands\BaseTestCommand;
 use Pp3\DataTierBundle\Reports\InventoryReport;
-use Earls\OxPeckerDataBundle\Database\StandardDBConnectionAdapter;
+use Earls\OxPeckerDataBundle\Database\DoctrineConnectionAdapter;
 
 
 class ListAllCommandTest extends BaseTestCommand
@@ -13,7 +13,7 @@ class ListAllCommandTest extends BaseTestCommand
     private $cmd = null;
     
     protected function setUp() {
-        $adapter = new StandardDBConnectionAdapter($this->getConnection());
+        $adapter = new DoctrineConnectionAdapter($this->createDoctrineConnection());
         $report = new InventoryReport($this->getLogger());
         
         $this->cmd = new ListAllCommand($adapter, $report, $this->getLogger());        
@@ -27,4 +27,5 @@ class ListAllCommandTest extends BaseTestCommand
         $this->assertTrue(is_array($result));
         $this->assertTrue(count($result) > 0);        
     }
+    
 }

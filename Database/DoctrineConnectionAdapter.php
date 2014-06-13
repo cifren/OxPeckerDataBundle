@@ -16,10 +16,8 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
     /**
      * constructor
      * 
-     * @param string    the connection string - a pipe delimited list of parameters, intended to be
-     *                  simple enough to create from a command line
+     * @param EntityManager    
      * 
-     * @tutorial        new DBConnection('14.100.3.44|dbname|username|password')
      */
      public function __construct(EntityManager $em) {
          $this->connection = $em;
@@ -27,27 +25,7 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
          $this->connection->getConfiguration()->setSQLLogger(null);
      }
      
-     /**
-     * constructor
-     * 
-     * @param string    the connection string - a pipe delimited list of parameters, intended to be
-     *                  simple enough to create from a command line
-     * 
-     * @tutorial        new DBConnection('14.100.3.44|dbname|username|password')
-     */
-    // public function __construct($connectionString = null) {
-        // if(!is_null($connectionString) && strlen($connectionString) > 0) {
-            // list(
-                // $this->host,
-                // $this->db,
-                // $this->user,
-                // $this->pass            
-            // ) = explode('|', $connectionString);
-        // }
-//         
-        // $this->createDoctrineConnection();
-    // }
-    
+        
     /**
      * query -  used as an adapter method to hide the possible different uses of the internal
      *          db connection's query method
@@ -74,7 +52,7 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
            }         
             
         }catch(\Exception $e){
-            $result = $e->getMessage();
+            $result = array($e->getMessage());
             $this->connection->rollback();
            
             return $result;
@@ -84,21 +62,8 @@ class DoctrineConnectionAdapter extends ConnectionAdapter
         return $result;
     }
     
-    /**
-     * createDoctrineConnection     since doctrine likes to be instantiated from the kernel's container
-     *                              we load->boot the kernel, and get the entity manager from the container.
-     *                              From there we are actually referencing the EM as the connection object
-     *                              but we have hidden that from the user in the adapter interface
-     */
-    private function createDoctrineConnection() {
-        $kernel = new \AppKernel(
-            isset($options['config']) ? $options['config'] : 'dev',
-            isset($options['debug']) ? (boolean) $options['debug'] : true
-            );       
-        $kernel->boot(); 
-          
-        $this->connection = $kernel->getContainer()->get('doctrine')->getManager($this->db);    
-        $this->connection->getConfiguration()->setSQLLogger(null);
-                    
+    public function getDBName() {
+        
+        return $this->connection->getConnection()->getDatabase();
     }
 }

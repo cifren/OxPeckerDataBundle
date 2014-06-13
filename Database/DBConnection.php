@@ -12,13 +12,13 @@ class DBConnection
 {
     
 
-    protected $host = '';//'10.100.2.85';
+    protected $host = '';
 
-    protected $user = '';//'point';
+    protected $user = '';
 
-    protected $pass = '';//'jhj@nP';
+    protected $pass = '';
 
-    protected $db = '';//'test'; //by default we will point to a test db if no concept name is provided
+    protected $db = '';
 
     private $lastQuery='';
 
@@ -34,7 +34,6 @@ class DBConnection
      * @param string    the connection string - a pipe delimited list of parameters, intended to be
      *                  simple enough to create from a command line
      * 
-     * @tutorial        new DBConnection('10.100.2.85|earlsus|point|jhj@nP')
      */
     public function __construct($connectionString = null) {
         if(!is_null($connectionString) && strlen($connectionString) > 0) {

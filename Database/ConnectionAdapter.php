@@ -17,11 +17,16 @@ abstract class ConnectionAdapter
     
     
     public function __construct($connection) {
-        $this->connection = $connection;      
+        $this->connection = $connection;  
     }
     
     /**
      * query - the method that hides the implementation from the user
      */
     public abstract function query($queryString);
+    
+    /**
+     * getDBName - returns the name of the current referenced database
+     */
+    public abstract function getDBName();
 }

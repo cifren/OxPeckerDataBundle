@@ -32,7 +32,7 @@ class StandardDBConnectionAdapter extends ConnectionAdapter
         try{
             $result = $this->connection->query($queryString);
         }catch(\Exception $e){
-            $result = $e->getMessage();
+            $result = array($e->getMessage());
             $this->connection->rollbackTransaction();
             return $result;
         }        
@@ -41,4 +41,7 @@ class StandardDBConnectionAdapter extends ConnectionAdapter
         return $result;
     }
      
+    public function getDBName() {
+        
+    }
 }

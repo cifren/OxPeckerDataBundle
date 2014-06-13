@@ -1,12 +1,12 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Tests\Command;
+namespace Earls\OxPeckerDataBundle\Tests\Commands;
 
 use Earls\OxPeckerDataBundle\Commands\DeleteCommand;
-use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
+use Earls\OxPeckerDataBundle\Tests\Commands\BaseTestCommand;
 use Pp3\DataTierBundle\Reports\InventoryReport;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
-use Earls\OxPeckerDataBundle\Database\StandardDBConnectionAdapter;
+use Earls\OxPeckerDataBundle\Database\DoctrineConnectionAdapter;
 
 class DeleteCommandTest extends BaseTestCommand
 {    
@@ -17,7 +17,7 @@ class DeleteCommandTest extends BaseTestCommand
     
     
     protected function setUp() {
-        $this->adapter = new StandardDBConnectionAdapter($this->getConnection());
+        $this->adapter = new DoctrineConnectionAdapter($this->createDoctrineConnection('test'));
         $this->report = new InventoryReport($this->getLogger());      
               
     }
@@ -37,8 +37,8 @@ class DeleteCommandTest extends BaseTestCommand
     }
     
     private function getRowCount() {
-        $conn = $this->getConnection()->getConnection();
-        $result = $conn->query('select count(weekId) as numRows from pp_stockbook_reports');
+      
+        $result = $this->adapter->query('select count(weekId) as numRows from pp_stockbook_reports');
        
         foreach($result as $row) {
             return $row['numRows'];

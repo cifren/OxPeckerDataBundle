@@ -88,7 +88,7 @@ class ReportBuilder
      */
     protected function initLogger() {
         $this->logger = new Logger('phpUnitTest');
-        $this->logger->pushHandler(new StreamHandler("app/logs/phpunit.log", Logger::DEBUG));  
+        $this->logger->pushHandler(new StreamHandler("app/logs/reportbuilder.log", Logger::DEBUG));  
         $this->logger->addDebug('ReportBuilder::initLogger completed successfully');     
     }
     

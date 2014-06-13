@@ -1,12 +1,11 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\Tests\Command;
+namespace Earls\OxPeckerDataBundle\Tests\Commands;
 
 use Earls\OxPeckerDataBundle\Commands\ImportCommand;
-use Earls\OxPeckerDataBundle\Tests\Command\BaseTestCommand;
+use Earls\OxPeckerDataBundle\Tests\Commands\BaseTestCommand;
 use Pp3\DataTierBundle\Reports\IngredientUsageReport;
 use Earls\OxPeckerDataBundle\Database\ConnectionAdapter;
-use Earls\OxPeckerDataBundle\Database\StandardDBConnectionAdapter;
 use Earls\OxPeckerDataBundle\Database\DoctrineConnectionAdapter;
 
 class ImportCommandTest extends BaseTestCommand
@@ -18,10 +17,8 @@ class ImportCommandTest extends BaseTestCommand
     
     
     protected function setUp() {
-        $connstring = '10.100.2.85|earls|point|jhj@nP';
         
-        //$this->adapter = new StandardDBConnectionAdapter($this->getConnection($connstring));
-        $this->adapter = new DoctrineConnectionAdapter($connstring);
+        $this->adapter = new DoctrineConnectionAdapter($this->createDoctrineConnection());
         $this->report = new IngredientUsageReport($this->adapter, $this->getLogger());      
               
     }

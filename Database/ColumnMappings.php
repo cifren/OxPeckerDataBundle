@@ -50,8 +50,7 @@ class ColumnMappings
      * @param string tablename 
      */
     private function loadColumnNames($tablename) {
-        
-        $results = $this->connection->query('show columns from ' . $tablename);
+       $results = $this->connection->query('show columns from ' . $tablename);
         $columns = array();
         foreach($results as $row) {
             $columns[$row['Field']] =  $row['Field'];
