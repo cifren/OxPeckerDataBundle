@@ -47,7 +47,7 @@ abstract class BaseCommand extends CommandQueue implements QueueManagerInterface
         $dataBuilder->execute($this->getCommandType(), $dataTierConfig, $args);
     }
 
-    protected function getCommandType()
+    public function getCommandType()
     {
         return null;
     }

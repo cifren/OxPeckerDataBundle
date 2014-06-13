@@ -17,7 +17,8 @@ class EarlsOxPeckerDataExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
+        $this->setParameters($config, $container);
+        
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
@@ -27,4 +28,8 @@ class EarlsOxPeckerDataExtension extends Extension
         return 'earls_ox_pecker_data';
     }
 
+    protected function setParameters(array $config, ContainerBuilder $container)
+    {
+        $container->setParameter('earls_ox_pecker_data.script_data', $config['script_path']);
+    }
 }

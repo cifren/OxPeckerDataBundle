@@ -21,7 +21,7 @@ class DeleteCommand extends BaseCommand
         ;
     }
 
-    protected function getCommandType()
+    public function getCommandType()
     {
         return 'delete';
     }
