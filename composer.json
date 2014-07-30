@@ -13,8 +13,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",    
-        "earls/oxpecker-data": "dev-master"
+        "php": ">=5.3.3", 
+        "knplabs/etl": "0.1.*@dev"
     },
     "autoload":     {
         "psr-0": { "Earls\\OxPeckerDataBundle": "" }

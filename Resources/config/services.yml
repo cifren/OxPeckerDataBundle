@@ -1,13 +1,6 @@
 parameters:
-    oxpecker.data.builder.class:        Earls\OxPeckerData\Builders\ReportBuilder
-    oxpecker.connection.doctrine.class:        Earls\OxPeckerData\Database\DoctrineConnectionAdapter
-    oxpecker.command.import.class:      Earls\OxPeckerDataBundle\Command\ImportCommand
-    oxpecker.command.delete.class:      Earls\OxPeckerDataBundle\Command\DeleteCommand
+    oxpecker.data.process.class:               Earls\OxPeckerDataBundle\Core\DataProcess
 
 services:
-    oxpecker.connection:
-        class:      %oxpecker.connection.doctrine.class%
-        arguments: ["@doctrine.dbal.default_connection"]
-
-    oxpecker.data.builder:
-        class:      %oxpecker.data.builder.class%
+    oxpecker.data.process:
+        class:      %oxpecker.data.process.class%

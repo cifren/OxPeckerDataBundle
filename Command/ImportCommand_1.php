@@ -2,6 +2,7 @@
 
 namespace Earls\OxPeckerDataBundle\Command;
 
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,15 +10,21 @@ use Earls\OxPeckerData\Report\SQLInterface;
 use Earls\OxPeckerData\Database\ConnectionAdapterInterface;
 
 /**
- * Earls\OxPeckerDataBundle\Command\BaseCommand
- *
- * BaseCommand  Base class for all Command objects
- *
- * @author  Dave Meikle
- * @date    2014-05-21
+ * Earls\OxPeckerDataBundle\Command\ImportCommand
  */
-abstract class BaseCommand extends ContainerAwareCommand
+class ImportCommand extends ContainerAwareCommand
 {
+
+    protected function configure()
+    {
+        parent::configure();
+        $this
+                ->setName('oxpecker:run')
+                ->setDescription('Run your data tier config')
+                ->addArgument('namedatatier', InputArgument::REQUIRED, 'Which data tier config do you want execute')
+                ->addArgument('args', InputArgument::IS_ARRAY, 'Add all arguments this command needs');
+        ;
+    }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
