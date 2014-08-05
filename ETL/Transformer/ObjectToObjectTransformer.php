@@ -20,11 +20,11 @@ class ObjectToObjectTransformer implements TransformerInterface
 
     public function transform($data, ContextInterface $context)
     {
-        $this->mapper->verifyCount($data);
-
         $object = new $this->className;
+        
 
         $this->mapper->set($data, $object);
+        echo "{$object->getId()}\n";
 
         return $object;
     }

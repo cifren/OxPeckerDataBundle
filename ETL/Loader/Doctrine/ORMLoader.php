@@ -33,11 +33,11 @@ class ORMLoader implements LoaderInterface
 
         $this->counter++;
 
-        if ($this->counter % $this->flushEvery === 0 || $shouldFlush) {
+        if ($this->counter % $this->flushEvery === 0) {
             $this->flush($context);
         }
 
-        if ($this->counter % $this->flushEvery === 0 || $shouldClear) {
+        if ($this->counter % $this->flushEvery === 0) {
             $this->clear($context);
         }
     }

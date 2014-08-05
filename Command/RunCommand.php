@@ -23,11 +23,12 @@ class RunCommand extends CommandErrorHandle
                 ->setDescription('Run your data tier config')
                 ->addArgument('namedatatier', InputArgument::REQUIRED, 'Which data tier config do you want execute')
                 ->addArgument('args', InputArgument::IS_ARRAY, 'Add all arguments this command needs');
-        ;
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        //TODO : edit command to include logger system with verbosity option
+        $this->verbose = true;
         $this->setStartTime();
         
         $container = $this->getContainer();
