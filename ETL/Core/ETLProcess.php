@@ -14,6 +14,7 @@ class ETLProcess
     protected $extractor;
     protected $transformers;
     protected $loader;
+    protected $logger;
 
     public function process()
     {
@@ -82,6 +83,22 @@ class ETLProcess
     public function setContext(ContextInterface $context)
     {
         $this->context = $context;
+        return $this;
+    }
+
+    public function getLogger()
+    {
+        if (!$this->logger) {
+            throw new \Exception('did you forget to setLogger ?');
+        }
+
+        return $this->logger;
+    }
+
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
+
         return $this;
     }
 

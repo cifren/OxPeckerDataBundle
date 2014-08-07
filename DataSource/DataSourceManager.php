@@ -7,25 +7,42 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Monolog\Logger;
+use Doctrine\ORM\EntityManager;
 
 class DataSourceManager
 {
 
     protected $entityManager;
+    protected $logger;
 
+    /**
+     * createTableFromDataSource
+     * 
+     * @param \Earls\OxPeckerDataBundle\DataSource\ORMDataSource $dataSource
+     */
     public function createTableFromDataSource(ORMDataSource $dataSource)
     {
-
         $entityName = $dataSource->getEntityName();
 
-        $this->dropTable($entityName);
+        $this->getLogger()->notice(" - $entityName");
+        $options = $dataSource->getOptions();
+
+        if ($options['dropOnInit']) {
+            $this->dropTable($entityName);
+        }
         $this->createTable($entityName);
-        $this->insertTable($entityName, $this->getSql($dataSource->getQuery()), $dataSource->getMapping());
+        $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
     }
 
+    /**
+     * dropTable
+     * 
+     * @param string $entityName
+     */
     public function dropTable($entityName)
     {
-        var_dump("dropTable $entityName");
+        $this->getLogger()->notice("Drop Table $entityName");
         //very Slow
 //        $tool = new SchemaTool($this->getEntityManager());
 //        $classes = array(
@@ -36,30 +53,43 @@ class DataSourceManager
         $classMetadata = $this->getEntityManager()->getClassMetadata($entityName);
         $sql = "DROP TABLE {$classMetadata->getTableName()}";
 
-        try{
+        try {
             $this->getEntityManager()->getConnection()->query($sql);
         } catch (\Exception $e) {
-            
+            $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
         }
     }
 
-    protected function createTable($entityName)
+    /**
+     * createTable
+     * 
+     * @param string $entityName
+     */
+    public function createTable($entityName)
     {
-        var_dump("createTable $entityName");
+        $this->getLogger()->notice("Create Table $entityName");
         $tool = new SchemaTool($this->getEntityManager());
         $classes = array(
             $this->getEntityManager()->getClassMetadata($entityName),
         );
-        $tool->createSchema($classes);
+
+        try {
+            $tool->createSchema($classes);
+        } catch (\Exception $e) {
+            $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
+        }
     }
 
     /**
+     * insertTable
      * 
-     * @return type
+     * @param string $entityName
+     * @param string|Query|QueryBuilder $query
+     * @param array $mapping
      */
-    public function insertTable($entityName, $query, $mapping)
+    public function insertTable($entityName, $query, array $mapping)
     {
-        var_dump("insertTable $entityName");
+        $this->getLogger()->notice("Insert Table $entityName");
         $classMetadata = $this->getEntityManager()->getClassMetadata($entityName);
 
         $connection = $this->getEntityManager()->getConnection();
@@ -71,11 +101,21 @@ class DataSourceManager
             $fieldsString .= $this->getColumnName($classMetadata, $targetField);
         }
 
-        $sql = "INSERT INTO {$classMetadata->getTableName()} ($fieldsString) ({$query})";
+        $sqlSelect = $this->getSql($query);
+
+        $sql = "INSERT INTO {$classMetadata->getTableName()} ($fieldsString) ({$sqlSelect})";
 
         $connection->query($sql);
     }
 
+    /**
+     * Get Column Name from the table giving targetfield from the entity
+     * 
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $classMetadata
+     * @param string $targetField
+     * 
+     * @return string
+     */
     public function getColumnName(ClassMetadata $classMetadata, $targetField)
     {
         if (isset($classMetadata->columnNames[$targetField])) {
@@ -88,6 +128,7 @@ class DataSourceManager
     }
 
     /**
+     * getEntityManager
      * 
      * @return \Doctrine\ORM\EntityManager
      */
@@ -96,13 +137,24 @@ class DataSourceManager
         return $this->entityManager;
     }
 
-    public function setEntityManager($entityManager)
+    /**
+     * 
+     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @return \Earls\OxPeckerDataBundle\DataSource\DataSourceManager
+     */
+    public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
         return $this;
     }
 
-    public function getSql($query)
+    /**
+     * getSql
+     * 
+     * @param string|Query|QueryBuilder $query
+     * @return string
+     */
+    protected function getSql($query)
     {
         if ($query instanceof QueryBuilder) {
             $query = $query->getQuery();
@@ -113,7 +165,36 @@ class DataSourceManager
         } else {
             $sql = $query;
         }
+
         return $sql;
+    }
+
+    /**
+     * getLogger
+     * 
+     * @return \Symfony\Bridge\Monolog\Logger
+     * @throws \Exception
+     */
+    public function getLogger()
+    {
+        if (!$this->logger) {
+            throw new \Exception('did you forget to setLogger ?');
+        }
+
+        return $this->logger;
+    }
+
+    /**
+     * setLogger
+     * 
+     * @param \Symfony\Bridge\Monolog\Logger $logger
+     * @return \Earls\OxPeckerDataBundle\DataSource\DataSourceManager
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
 }
