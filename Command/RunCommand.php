@@ -60,11 +60,11 @@ class RunCommand extends AdvancedCommand
     {
         $this->setStartTime();
         $dataTierConfigOptions = $dataTierConfig->getOptions();
-        
+
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
             $cmdManager = $this->getContainer()->get('flamingo.manager.command');
-            
+
             //set entity manager
             if ($dataTierConfig->getEntityManager()) {
                 $cmdManager->setEntityManager($dataTierConfig->getEntityManager());
@@ -88,7 +88,7 @@ class RunCommand extends AdvancedCommand
         $this->setEndTime();
         $this->noticeTime();
         $dataTierConfigOptions = $dataTierConfig->getOptions();
-        
+
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
             //should keep all config from $this->start() function
@@ -152,10 +152,10 @@ class RunCommand extends AdvancedCommand
      */
     protected function formatArguments(array $mappingArgs = null, array $args)
     {
-        $formatedArgs = $mappingArgs;
+        $formatedArgs = $mappingArgs ? $mappingArgs : array();
         foreach ($args as $arg) {
             $argumentExploded = explode('=', $arg);
-            
+
             //ignore argument without '=' sign
             if (count($argumentExploded) < 2) {
                 continue;

@@ -4,3 +4,6 @@ parameters:
 services:
     oxpecker.data.process:
         class:      %oxpecker.data.process.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@logger"

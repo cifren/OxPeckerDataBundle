@@ -20,12 +20,18 @@ class DataProcess
      * @var EntityManager 
      */
     protected $entityManager;
-    
+
     /**
      *
      * @var Logger 
      */
     protected $logger;
+
+    public function __construct(EntityManager $entityManager, Logger $logger)
+    {
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
+    }
 
     /**
      * Process the data based on the configuration
@@ -36,17 +42,19 @@ class DataProcess
     public function process(DataConfigurationInterface $config, array $params)
     {
         $dataProcessContext = $this->createContext($params);
-        $this->setEntityManager($config->getEntityManager());
+        if ($config->getEntityManager()) {
+            $this->setEntityManager($config->getEntityManager());
+        }
 
         $this->getLogger()->notice("PreProcess");
         $config->preProcess($dataProcessContext);
 
         $dataSources = $config->getDataSources($dataProcessContext);
         $dataProcessContext->setDataSources($dataSources);
-        
+
         $this->getLogger()->notice("Create Data Sources");
         $this->createDataSources($dataSources);
-        
+
         $etlProcesses = $config->getETLProcesses($dataProcessContext);
         $dataProcessContext->setEtlProcesses($etlProcesses);
 

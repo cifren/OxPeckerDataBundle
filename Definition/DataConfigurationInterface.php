@@ -47,10 +47,6 @@ interface DataConfigurationInterface
 
     public function getOptions();
 
-    public function setOptions(array $defaultOptions);
-
-    public function getDefaultOptions();
-
     public function setCommandGroup($name, array $args);
 
     public function getEntityManager();
