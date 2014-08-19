@@ -2,6 +2,7 @@
 
 namespace Earls\OxPeckerDataBundle\Definition;
 
+use Doctrine\ORM\EntityManager;
 use Earls\OxPeckerDataBundle\Definition\Context;
 use Symfony\Bridge\Monolog\Logger;
 
@@ -37,10 +38,22 @@ interface DataConfigurationInterface
      * 
      */
     public function setParamsMapping();
-    
+
     /**
      * 
      * @param \Symfony\Bridge\Monolog\Logger $logger
      */
     public function setLogger(Logger $logger);
+
+    public function getOptions();
+
+    public function setOptions(array $defaultOptions);
+
+    public function getDefaultOptions();
+
+    public function setCommandGroup($name, array $args);
+
+    public function getEntityManager();
+
+    public function setEntityManager(EntityManager $entityManager);
 }

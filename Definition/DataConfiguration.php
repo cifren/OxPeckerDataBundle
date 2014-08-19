@@ -2,11 +2,15 @@
 
 namespace Earls\OxPeckerDataBundle\Definition;
 
+use Doctrine\ORM\EntityManager;
 use Earls\OxPeckerDataBundle\Definition\Context;
 use Symfony\Bridge\Monolog\Logger;
 
 class DataConfiguration implements DataConfigurationInterface
 {
+
+    protected $entityManager;
+    protected $defaultOptions;
 
     /**
      *
@@ -91,6 +95,49 @@ class DataConfiguration implements DataConfigurationInterface
     {
         $this->logger = $logger;
 
+        return $this;
+    }
+
+    protected function setOptions(array $defaultOptions)
+    {
+        return $defaultOptions;
+    }
+
+    public function getOptions()
+    {
+        return $this->setOptions($this->getDefaultOptions());
+    }
+
+    protected function getDefaultOptions()
+    {
+        if(!$this->defaultOptions){
+            $this->defaultOptions = array(
+                'activate-flamingo' => false
+            );
+        }
+        return $this->defaultOptions;
+    }
+
+    protected function setDefaultOptions(array $defaultOptions)
+    {
+        $this->defaultOptions = $defaultOptions;
+        
+        return $this;
+    }
+
+    public function setCommandGroup($name, array $args)
+    {
+        return $name;
+    }
+
+    public function getEntityManager()
+    {
+        return $this->entityManager;
+    }
+
+    public function setEntityManager(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
         return $this;
     }
 

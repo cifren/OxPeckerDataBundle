@@ -26,7 +26,6 @@ class RunCommand extends AdvancedCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setStartTime();
         $container = $this->getContainer();
 
         $this->getLogger()->notice("Process {$input->getArgument('namedatatier')}");
@@ -42,17 +41,62 @@ class RunCommand extends AdvancedCommand
             $this->helpDisplay($input->getArgument('namedatatier'), $dataTierConfig->setParamsMapping(), $output);
             return true;
         }
+        $args = $this->formatArguments($dataTierConfig->setParamsMapping(), $input->getArgument('args'));
+
+        //log system
+        $this->startScript($dataTierConfig, $input->getArgument('namedatatier'), $args);
 
         $dataProcess = $this->getContainer()->get('oxpecker.data.process');
         $dataProcess->setLogger($this->getLogger());
-
-        $args = $this->formatArguments($dataTierConfig->setParamsMapping(), $input->getArgument('args'));
         $dataProcess->process($dataTierConfig, $args);
 
-        $this->setEndTime();
-        $this->noticeTime();
+        //log system
+        $this->stopScript($dataTierConfig);
 
         return true;
+    }
+
+    protected function startScript(DataConfigurationInterface $dataTierConfig, $name, array $args)
+    {
+        $this->setStartTime();
+        $dataTierConfigOptions = $dataTierConfig->getOptions();
+        
+        //run flamingo only if activate
+        if ($dataTierConfigOptions['activate-flamingo']) {
+            $cmdManager = $this->getContainer()->get('flamingo.manager.command');
+            
+            //set entity manager
+            if ($dataTierConfig->getEntityManager()) {
+                $cmdManager->setEntityManager($dataTierConfig->getEntityManager());
+            }
+
+            //get the name of the group you want to give to Flamingo in order to manage queuing
+            $group = $dataTierConfig->setCommandGroup($name, $args);
+
+            //if an array means an array of option for Flamingo
+            if (is_array($dataTierConfigOptions['activate-flamingo'])) {
+                $cmdManager->setOptions($dataTierConfigOptions['activate-flamingo']);
+            }
+
+            //start manager on this instance
+            $cmdManager->start($name, $group);
+        }
+    }
+
+    protected function stopScript(DataConfigurationInterface $dataTierConfig)
+    {
+        $this->setEndTime();
+        $this->noticeTime();
+        $dataTierConfigOptions = $dataTierConfig->getOptions();
+        
+        //run flamingo only if activate
+        if ($dataTierConfigOptions['activate-flamingo']) {
+            //should keep all config from $this->start() function
+            $cmdManager = $this->getContainer()->get('flamingo.manager.command');
+
+            //stop timer and log all information in database
+            $cmdManager->stop($this->getLogs());
+        }
     }
 
     /**
@@ -111,6 +155,7 @@ class RunCommand extends AdvancedCommand
         $formatedArgs = $mappingArgs;
         foreach ($args as $arg) {
             $argumentExploded = explode('=', $arg);
+            
             //ignore argument without '=' sign
             if (count($argumentExploded) < 2) {
                 continue;
@@ -122,6 +167,11 @@ class RunCommand extends AdvancedCommand
         }
 
         return $formatedArgs;
+    }
+
+    protected function getLogs()
+    {
+        return $this->getLogger()->getLogs();
     }
 
 }
