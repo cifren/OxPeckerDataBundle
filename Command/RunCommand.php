@@ -70,16 +70,18 @@ class RunCommand extends AdvancedCommand
                 $cmdManager->setEntityManager($dataTierConfig->getEntityManager());
             }
 
-            //get the name of the group you want to give to Flamingo in order to manage queuing
-            $group = $dataTierConfig->setCommandGroup($name, $args);
-
+            $queueGroupName = null;
+            $queueUniqueId = null;
+            
             //if an array means an array of option for Flamingo
             if (is_array($dataTierConfigOptions['activate-flamingo'])) {
+                $queueGroupName = $dataTierConfigOptions['activate-flamingo']['queueGroupName'];
+                $queueUniqueId = $dataTierConfigOptions['activate-flamingo']['queueUniqueId'];
                 $cmdManager->setOptions($dataTierConfigOptions['activate-flamingo']);
             }
 
             //start manager on this instance
-            $cmdManager->start($name, $group);
+            $cmdManager->start($name, $queueGroupName, $queueUniqueId);
         }
     }
 

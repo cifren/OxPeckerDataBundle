@@ -47,8 +47,6 @@ interface DataConfigurationInterface
 
     public function getOptions();
 
-    public function setCommandGroup($name, array $args);
-
     public function getEntityManager();
 
     public function setEntityManager(EntityManager $entityManager);

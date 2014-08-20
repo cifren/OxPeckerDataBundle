@@ -125,11 +125,6 @@ class DataConfiguration implements DataConfigurationInterface
         return $this;
     }
 
-    public function setCommandGroup($name, array $args)
-    {
-        return $name;
-    }
-
     public function getEntityManager()
     {
         return $this->entityManager;
