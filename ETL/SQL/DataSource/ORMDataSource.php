@@ -2,8 +2,6 @@
 
 namespace Earls\OxPeckerDataBundle\DataSource;
 
-
-
 class ORMDataSource extends DataSource
 {
 
@@ -22,7 +20,7 @@ class ORMDataSource extends DataSource
      * @param array $mapping
      * @param array $options
      */
-    public function __construct($entityName, $query, array $mapping, array $options = null)
+    public function __construct($query, $entityName, array $mapping, array $options = null)
     {
         $this->entityName = $entityName;
         $this->query = $query;

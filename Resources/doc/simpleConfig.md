@@ -3,13 +3,13 @@ Your first report table
 
 Here a simple example of `report table` creation. 
 
-In this Example, we will display an ingredient list (this example is really basic but can be replicate on more complicated case with a lot of join table).
+In this Example, we will display an ingredient list (this example is really basic but can be replicate on more complicated case.
 
 You need tables structure :
   
   Table `ingredient`:
 
-    id  |Ing_name   |fk_recipe_id
+    id  |ing_name   |fk_recipe_id
     ----|-----------|------------
     1   |asparag    |1
     2   |salt       |1
@@ -23,9 +23,9 @@ You need tables structure :
     2   |olive plate    
     
   Table `rpt_recipe_ing`:
-    id      |recipe_id |ing_id
+    id      |rpt_recipe_name |rpt_ingredient_name
     --------------------------
-    null    |null      |
+    null    |null        |null
 
 
 The folder structure for the example :
@@ -33,186 +33,106 @@ The folder structure for the example :
 ```
 -- src/
 ---- Project/
+------ Entity
+-------- RptRecipeIng
 ------ DataTierBundle/
--------- ReportData/
----------- FirstReportData.php
+-------- OxPeckerConfiguration/
+---------- FirstReportDataConfiguration.php
 ```
+
+First create your entity `RptRecipeIng` based on the structure of the table `rpt_recipe_ing`
 
 Config file
 ========
-Create your `reportData file` :
+Create your `FirstReportDataConfiguration file` :
 
 ```php
 
-namespace Project\DataTierBundle\ReportData;
+namespace Project\DataTierBundle\OxPeckerConfiguration;
 
-use Earls\OxPeckerData\Database\Query;
+use Earls\OxPeckerDataBundle\Definition\DataConfiguration;
+use Earls\OxPeckerDataBundle\Definition\Context;
 
 /**
- *  Setup your query or handler to manage your work on report table
+ *  Setup config
  
- *  Project\DataTierBundle\ReportData\FirstReportData
+ *  Project\DataTierBundle\OxPeckerConfiguration\FirstReportDataConfiguration
  */
-class FirstReportData extends ReportData
+class FirstReportDataConfiguration extends DataConfiguration
 {
 
-    //this function will be launched everytime you launch the sf2 command oxPecker:import
-    public function getImport(array $params)
+    public function preProcess(Context $context)
     {
-        $where = null;
-        $pdoParams = array();
-        
-        if (isset($params['recipe_id'])) {
-            $where .= $where ? 'WHERE ' : null;
-            $where .= "recipe_id = :recipe ";
-            $pdoParams['recipe'] = $params['recipe_id'];
-        }
-        
-        $query = 'INSERT INTO rpt_recipe_ing 
-                    SELECT r.id, i.id FROM recipe r JOIN ingredient i ON r.id = i.recipe_id ' . $where;
-        $query = new Query($query, $pdoParams);
-        
-        //return can be a handler or a query object
-        return $query;
+        //nothing for now
     }
     
-    //this function will be launch everytime you launch the sf2 command oxPecker:delete
-    public function getDelete(array $params)
+    /**
+     * authorized arguments
+     *
+     * @return array
+     */
+    public function getETLProcesses(Context $context)
     {
-        $where = null;
-        $pdoParams = array();
-        
-        if (!isset($params['recipe_id'])) {
-            throw new \Exception('Required param recipe_id');
-        }
-        
-        $query = 'DELETE rpt_recipe_ing WHERE recipe_id = :recipe';
-        $pdoParams['recipe'] = $params['recipe_id'];
-        $query = new Query($query, $pdoParams);
-        
-        //return can be a handler or a query object
-        return $query;
-    }
-    
-    //if this function return null, all arguments are allow, 
-    //if return empty array, no arguments are allow
-    //if return array with value, only given arguments will be allow
-    //any other arguments in the two last case will be ignore
-    public function setParamsMapping()
-    {
-        $mapping = array(
-            //recipe_id is the param name you will pass later to your command, null is the default value
-            'recipe_id' => null,
+        $etlProcesses = array(
+            new SqlETLProcess(
+                'SELECT ing_name, recipe_name '. //Transformation
+                'FROM ingredient i JOIN recipe r ON i.fk_recipe_id = r.id', //FROM: Extraction
+                'RptRecipeIng', //TO : Load, where you want to send the data
+                array('rptRecipeName', 'rptIngredientName') //MAPPING: From the SELECT statement to the entity, matching fields from SQL statement to the entity
+            ),
         );
 
-        return $mapping;
+        return $etlProcesses;
+    }
+    
+    /**
+     * authorized arguments
+     *
+     * @return array
+     */
+    public function postProcess(Context $context)
+    {
+        //nothing for now
     }
 }
 ```
 
-This class will be the core of your dataReport which will build your report table `rpt_recipe_ing`
+And that's it your config is done.
+
+In the constructor of `SqlETLProcess` you can use `Raw sql` statment, `Doctrine\ORM\Query` or `Doctrine\DBAL\Query\QueryBuilder`.
+
+As you can see, ETL is still used :
+- Extraction : By the FROM
+- Transformation : By the SELECT
+- Load : By The entity
 
 
 Create your service:
 ```yaml
 parameters:
-    datatier.recipe.class:      Project\DataTierBundle\ReportData\FirstReportData
+    datatier.recipe.class:      Project\DataTierBundle\OxPeckerConfiguration\FirstReportDataConfiguration
 
 services:
     datatier.recipe:
         class:      %datatier.recipe.class%
 ```
 
-Handler in your reportData
-==========================
-
-You can as well create a handler in order to manage your work:
-
-in `Project\DataTierBundle\ReportData\FirstReportData`
-```php
-    use Project\DataTierBundle\\Handlers\RecipeHandler;
-    
-    public __construct($connection)
-    {
-        $this->connection = $connection;
-    }
-    
-    public function getImport()
-    {
-        return new recipeHandler($this->connection);
-    }
-```
-
-your handler `Project\DataTierBundle\Handlers\RecipeHandler` 
-```php
-
-namespace Project\DataTierBundle\Handlers;
-
-use Earls\OxPeckerData\Handler\DataHandlerInterface;
-
-/**
- *  Excute all your code for your import here
- *
- *  Project\DataTierBundle\Handlers\RecipeHandler
- */
-class RecipeHandler extends DataHandlerInterface
-{
-    public function __construct($connection, array $params)
-    {
-        $this->connection = $connection;
-        $this->params = $params;
-    }
-    
-    //this function will be executed by the sf2 command
-    public function execute()
-    {
-        $where = null;
-        $pdoParams = array();
-        
-        if (isset($params['recipe_id'])) {
-            $where .= $where ? 'WHERE ' : null;
-            $where .= "recipe_id = :recipe ";
-            $pdoParams['recipe'] = $params['recipe_id'];
-        }
-        
-        $query = 'INSERT INTO rpt_recipe_ing 
-                    SELECT r.id, i.id FROM recipe r JOIN ingredient i ON r.id = i.recipe_id ' . $where;
-        $query = new Query($query, $pdoParams);
-        
-        $this->executeQuery($query);
-    }
-
-    protected function executeQuery(Query $query)
-    {
-        $stmt = $this->connection->prepare($query->getSql());
-
-        foreach($query->getParams() as $key => $value){
-            $stmt->bindValue(":$key", $value, \PDO::PARAM_STR);
-        }
-
-        $stmt->execute();
-
-        return $stmt;
-    }
-}
-```
-
-your service:
-```yaml
-    datatier.recipe:
-        class:      %datatier.recipe.class%
-        #@connection can be any connection, can be doctrine, you have to adapt your code with it
-        arguments: ["@connection"]
-```
+The name of your service `datatier.recipe`, will be the key of the call from the console.
 
 Command
 =======
 
-From Symfony2 you can run 2 commands :
+From Symfony2 you can run your command which will use your config :
 ```shell
-#usage
+#generic usage
 php app/console oxpecker:import service_name args
+```
+- service_name: it is the name of your service, in our case it is `datatier.recipe`
+- args : it is the list of your arguments you want to send to your command, for example if you choose to give the Id of an ingredient, `ingredient_id=1582` for more details see [doc arguments](https://github.com/Earls/OxPeckerDataBundle/blob/master/Resources/doc/arguments.md)
 
+Here some example of calls :
+
+```shell
 #example without param: (for a cron job for example)
 php app/console oxpecker:import datatier.recipe
 
@@ -220,13 +140,3 @@ php app/console oxpecker:import datatier.recipe
 php app/console oxpecker:import datatier.recipe recipe_id=1
 
 ```
-
-```shell
-#usage
-php app/console oxpecker:import service_name args
-
-#example without param: (in this example this command will trigger an exception)
-php app/console oxpecker:delete datatier.recipe
-
-#example with param:
-php app/console oxpecker:delete datatier.recipe recipe_id=1

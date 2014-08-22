@@ -13,9 +13,9 @@ class SqlETLProcess implements ETLProcessInterface
     protected $logger;
     protected $datasourceManager;
 
-    public function __construct($entityName, $query, array $mapping, array $options = null)
+    public function __construct($query, $entityName, array $mapping, array $options = null)
     {
-        $this->datasource = new ORMDataSource($entityName, $query, $mapping, $options);
+        $this->datasource = new ORMDataSource($query, $entityName, $mapping, $options);
     }
 
     public function process()

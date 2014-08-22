@@ -8,12 +8,20 @@ Second solution is to use ETL using PHP, this method gives you unlimited possibi
 
 The idea is to:
 
-1. Create a configuration file defining Query you want use for the import / delete data. (SQL lqyer)
-2. Apply an ETL on the top of it. (PHP layer)
-2. Launch the command manualy/via cron task, with parameters or not.
+1. Create a configuration file defining ETL you want to use for the import data. (SQL/PHP ETL)
+2. Launch the command via cron task, with parameters or not.
+
 
 Theory
 ======
+
+In your config you define :
+    - Pre Process method where you define all your command, for example you can do data deletion, data control, table structure etc...
+    - Etl Processes method where you define a list of ETL, of course when you use SQL ETL, this one will allow only import from SQL to SQL, but nothing forbidden to create a previous ETL to import CSV to SQL and after link this data to a table in SQL.
+    - Post Process method where you define all your command after Etls have been executed, for example delete temporary tables, test the data etc...
+
+Your command will be based on the creation of a service for the declaration and the config you created.
+
 
 Documentation
 =============
