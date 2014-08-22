@@ -8,18 +8,7 @@ interface ContextInterface
     /**
      * @return array
      */
-    public function getDataSources();
-
-    /**
-     * @return array
-     */
     public function getArgs();
-
-    /**
-     * 
-     * @param array $dataSources
-     */
-    public function setDataSources(array $dataSources);
 
     /**
      * 

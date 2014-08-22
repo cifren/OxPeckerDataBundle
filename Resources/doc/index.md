@@ -19,4 +19,4 @@ Improvements
 ============
 
 TO DO:
-- Fix bug on group when no groupBy
+- Create a page to run the import/delete command from controller instead of command line

@@ -1,9 +1,17 @@
 parameters:
-    oxpecker.data.process.class:               Earls\OxPeckerDataBundle\Core\DataProcess
+    oxpecker.data.process.class:                    Earls\OxPeckerDataBundle\Core\DataProcess
+    oxpecker.data.datasource.manager.class:         Earls\OxPeckerDataBundle\DataSource\DataSourceManager
 
-services:
+services:            
+    oxpecker.data.datasource.manager:
+        class:      %oxpecker.data.datasource.manager.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@logger"
+            
     oxpecker.data.process:
         class:      %oxpecker.data.process.class%
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@logger"
+            - "@oxpecker.data.datasource.manager"

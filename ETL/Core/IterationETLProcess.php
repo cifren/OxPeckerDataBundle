@@ -7,7 +7,7 @@ use Knp\ETL\TransformerInterface;
 use Knp\ETL\LoaderInterface;
 use Knp\ETL\ContextInterface;
 
-class ETLProcess
+class IterationETLProcess implements ETLProcessInterface
 {
 
     protected $context;
@@ -15,6 +15,13 @@ class ETLProcess
     protected $transformers;
     protected $loader;
     protected $logger;
+
+    public function __construct(ExtractorInterface $extractor, array $transformers, LoaderInterface $loader)
+    {
+        $this->extractor = $extractor;
+        $this->transformers = $transformers;
+        $this->loader = $loader;
+    }
 
     public function process()
     {

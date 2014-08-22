@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Earls\OxPeckerDataBundle\DataSource\DataSourceManager;
 use Earls\OxPeckerDataBundle\Definition\Context as DataProcessContext;
 use Symfony\Bridge\Monolog\Logger;
+use Earls\OxPeckerDataBundle\ETL\Core\SqlETLProcess;
 
 /**
  * Earls\OxPeckerDataBundle\Core\DataProcess
@@ -27,7 +28,13 @@ class DataProcess
      */
     protected $logger;
 
-    public function __construct(EntityManager $entityManager, Logger $logger)
+    /**
+     *
+     * @var DataSourceManager 
+     */
+    protected $dataSourceManager;
+
+    public function __construct(EntityManager $entityManager, Logger $logger, DataSourceManager $dataSourceManager)
     {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
@@ -49,12 +56,6 @@ class DataProcess
         $this->getLogger()->notice("PreProcess");
         $config->preProcess($dataProcessContext);
 
-        $dataSources = $config->getDataSources($dataProcessContext);
-        $dataProcessContext->setDataSources($dataSources);
-
-        $this->getLogger()->notice("Create Data Sources");
-        $this->createDataSources($dataSources);
-
         $etlProcesses = $config->getETLProcesses($dataProcessContext);
         $dataProcessContext->setEtlProcesses($etlProcesses);
 
@@ -63,22 +64,6 @@ class DataProcess
 
         $this->getLogger()->notice("PostProcess");
         $config->postProcess($dataProcessContext);
-    }
-
-    /**
-     * Create data sources using DataSourceManager
-     * 
-     * @param array $dataSources
-     */
-    protected function createDataSources(array $dataSources)
-    {
-        $manager = new DataSourceManager();
-        $manager->setEntityManager($this->getEntityManager());
-        $manager->setLogger($this->getLogger());
-
-        foreach ($dataSources as $dataSource) {
-            $manager->createTableFromDataSource($dataSource);
-        }
     }
 
     /**
@@ -92,6 +77,9 @@ class DataProcess
             $etlProcess->setLogger($this->getLogger());
             if (!$etlProcess->getContext()) {
                 $etlProcess->setContext(new Context());
+            }
+            if ($etlProcess instanceof SqlETLProcess) {
+                $etlProcess->setDatasourceManager($this->datasourceManager);
             }
 
             $etlProcess->process();

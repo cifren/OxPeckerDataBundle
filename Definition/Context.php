@@ -12,12 +12,8 @@ class Context implements ContextInterface
      *
      * @var array 
      */
-    protected $dataSources;
-    /**
-     *
-     * @var array 
-     */
     protected $args;
+
     /**
      *
      * @var array 
@@ -28,29 +24,9 @@ class Context implements ContextInterface
      * 
      * @return array
      */
-    public function getDataSources()
-    {
-        return $this->dataSources;
-    }
-
-    /**
-     * 
-     * @return array
-     */
     public function getArgs()
     {
         return $this->args;
-    }
-
-    /**
-     * 
-     * @param array $dataSources
-     * @return \Earls\OxPeckerDataBundle\Definition\Context
-     */
-    public function setDataSources(array $dataSources)
-    {
-        $this->dataSources = $dataSources;
-        return $this;
     }
 
     /**
