@@ -139,4 +139,7 @@ php app/console oxpecker:import datatier.recipe
 #example with param:
 php app/console oxpecker:import datatier.recipe recipe_id=1
 
+#example for help:
+php app/console oxpecker:import datatier.recipe help
+
 ```
