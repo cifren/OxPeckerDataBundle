@@ -4,8 +4,8 @@
     "description": "Create quickly report tables with OxPeckerData, add-on for symfony2",
     "keywords": ["reporting", "report", "data"],
     "homepage": "https://github.com/earls/OxPeckerDataBundle",
-    "license": "MIT",       
-    "minimum-stability": "dev", 
+    "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Dev earls",
@@ -13,11 +13,15 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3", 
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
         "knplabs/etl": "0.1.*@dev"
     },
-    "autoload":     {
-        "psr-0": { "Earls\\OxPeckerDataBundle": "" }
+    "autoload": {
+        "psr-0": {
+            "Earls\\OxPeckerDataBundle": ""
+        }
     },
     "minimum-stability": "dev",
     "target-dir": "Earls/OxPeckerDataBundle"
