@@ -50,4 +50,8 @@ interface DataConfigurationInterface
     public function getEntityManager();
 
     public function setEntityManager(EntityManager $entityManager);
+
+    public function setQueueGroupName($name, array $args);
+
+    public function setQueueUniqueId($name, array $args);
 }

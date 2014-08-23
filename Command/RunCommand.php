@@ -75,8 +75,8 @@ class RunCommand extends AdvancedCommand
             
             //if an array means an array of option for Flamingo
             if (is_array($dataTierConfigOptions['activate-flamingo'])) {
-                $queueGroupName = $dataTierConfigOptions['activate-flamingo']['queueGroupName'];
-                $queueUniqueId = $dataTierConfigOptions['activate-flamingo']['queueUniqueId'];
+                $queueGroupName = $dataTierConfig->setQueueGroupName($name, $args);
+                $queueUniqueId = $dataTierConfig->setQueueUniqueId($name, $args);
                 $cmdManager->setOptions($dataTierConfigOptions['activate-flamingo']);
             }
 

@@ -110,7 +110,7 @@ class DataConfiguration implements DataConfigurationInterface
 
     protected function getDefaultOptions()
     {
-        if(!$this->defaultOptions){
+        if (!$this->defaultOptions) {
             $this->defaultOptions = array(
                 'activate-flamingo' => false
             );
@@ -121,7 +121,7 @@ class DataConfiguration implements DataConfigurationInterface
     protected function setDefaultOptions(array $defaultOptions)
     {
         $this->defaultOptions = $defaultOptions;
-        
+
         return $this;
     }
 
@@ -134,6 +134,16 @@ class DataConfiguration implements DataConfigurationInterface
     {
         $this->entityManager = $entityManager;
         return $this;
+    }
+
+    public function setQueueGroupName($name, array $args)
+    {
+        return null;
+    }
+
+    public function setQueueUniqueId($name, array $args)
+    {
+        return null;
     }
 
 }

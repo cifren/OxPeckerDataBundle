@@ -20,11 +20,11 @@ Theory
 
 In your config you define :
 
-- Pre Process method where you define all your command, for example you can do data deletion, data control, table structure etc...
+- `Pre Process` method where you define all your command, for example you can do data deletion, data control, table structure etc...
 
-- Etl Processes method where you define a list of ETL, of course when you use SQL ETL, this one will allow only import from SQL to SQL, but nothing forbidden to create a previous ETL to import CSV to SQL and after link this data to a table in SQL.
+- `Etl Processes` method where you define a list of ETL, of course when you use SQL ETL, this one will allow only import from SQL to SQL, but nothing forbidden to create a previous ETL to import CSV to SQL and after link this data to a table in SQL.
     
-- Post Process method where you define all your command after Etls have been executed, for example delete temporary tables, test the data etc...
+- `Post Process` method where you define all your command after Etls have been executed, for example delete temporary tables, test the data etc...
 
 Your command will be based on the creation of a service for the declaration and the config you created.
 

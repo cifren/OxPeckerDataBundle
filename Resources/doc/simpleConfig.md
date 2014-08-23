@@ -23,9 +23,10 @@ You need tables structure :
     2   |olive plate    
     
   Table `rpt_recipe_ing`:
+  
     id      |rpt_recipe_name |rpt_ingredient_name
-    --------------------------
-    null    |null        |null
+    --------|----------------|-------------------
+    null    |null            |null
 
 
 The folder structure for the example :
@@ -63,7 +64,7 @@ class FirstReportDataConfiguration extends DataConfiguration
 
     public function preProcess(Context $context)
     {
-        //nothing for now
+        //what you want
     }
     
     /**
@@ -92,7 +93,7 @@ class FirstReportDataConfiguration extends DataConfiguration
      */
     public function postProcess(Context $context)
     {
-        //nothing for now
+        //what you want
     }
 }
 ```
@@ -101,10 +102,24 @@ And that's it your config is done.
 
 In the constructor of `SqlETLProcess` you can use `Raw sql` statment, `Doctrine\ORM\Query` or `Doctrine\DBAL\Query\QueryBuilder`.
 
-As you can see, ETL is still used :
-- Extraction : By the FROM
-- Transformation : By the SELECT
-- Load : By The entity
+As you can see, **ETL** is still used :
+- **Extraction** : By the FROM
+- **Transformation** : By the SELECT
+- **Load** : By The entity
+
+##### *WARNING*:
+
+    When the system will call `SqlETLProcess` the system will drop automatically the entity table and recreate this table. If you don't want this default behaviour, just add the option `dropOnInit`
+    
+```php 
+    new SqlETLProcess(
+            'SELECT ing_name, recipe_name 
+             FROM ingredient i JOIN recipe r ON i.fk_recipe_id = r.id', 
+            'RptRecipeIng', 
+            array('rptRecipeName', 'rptIngredientName'), 
+            array('dropOnInit' => false)
+        ),
+```
 
 
 Create your service:
@@ -128,6 +143,7 @@ From Symfony2 you can run your command which will use your config :
 php app/console oxpecker:import service_name args
 ```
 - service_name: it is the name of your service, in our case it is `datatier.recipe`
+
 - args : it is the list of your arguments you want to send to your command, for example if you choose to give the Id of an ingredient, `ingredient_id=1582` for more details see [doc arguments](https://github.com/Earls/OxPeckerDataBundle/blob/master/Resources/doc/arguments.md)
 
 Here some example of calls :
