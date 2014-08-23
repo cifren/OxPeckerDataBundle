@@ -6,9 +6,10 @@ Installation
 Usage Documentation
 ===================
 
-* [First report table] (https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/simpleConfig.md)
-* [Second report table](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/advancedConfig.md)
-* [ETL](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/etl.md)
+* [First data table](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/simpleConfig.md)
+* [More Advanced data table](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/advancedConfig.md)
+* [Arguments](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/arguments.md)
+* [FlamingoQueueCommand](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/flamingo.md)
 
 Developer Documentation
 =======================
