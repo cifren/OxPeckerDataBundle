@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Earls\OxPeckerDataBundle\Definition\DataConfigurationInterface;
-use Fuller\FullerGroupBundle\Command\Common\Classes\AdvancedCommand;
+use Earls\OxPeckerDataBundle\Command\AdvancedCommand;
 
 /**
  * Earls\OxPeckerDataBundle\Command\RunCommand
