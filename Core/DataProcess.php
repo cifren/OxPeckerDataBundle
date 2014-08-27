@@ -5,7 +5,7 @@ namespace Earls\OxPeckerDataBundle\Core;
 use Earls\OxPeckerDataBundle\Definition\DataConfigurationInterface;
 use Knp\ETL\Context\Context;
 use Doctrine\ORM\EntityManager;
-use Earls\OxPeckerDataBundle\DataSource\DataSourceManager;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager;
 use Earls\OxPeckerDataBundle\Definition\Context as DataProcessContext;
 use Symfony\Bridge\Monolog\Logger;
 use Earls\OxPeckerDataBundle\ETL\Core\SqlETLProcess;

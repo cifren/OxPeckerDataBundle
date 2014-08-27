@@ -1,8 +1,8 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\DataSource;
+namespace Earls\OxPeckerDataBundle\ETL\SQL\DataSource;
 
-use Earls\OxPeckerDataBundle\DataSource\ORMDataSource;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;

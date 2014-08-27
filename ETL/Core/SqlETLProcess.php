@@ -2,7 +2,7 @@
 
 namespace Earls\OxPeckerDataBundle\ETL\Core;
 
-use Earls\OxPeckerDataBundle\DataSource\ORMDataSource;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 use Knp\ETL\ContextInterface;
 
 class SqlETLProcess implements ETLProcessInterface

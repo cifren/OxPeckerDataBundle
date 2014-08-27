@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\DataSource;
+namespace Earls\OxPeckerDataBundle\ETL\SQL\DataSource;
 
 class ORMDataSource extends DataSource
 {
