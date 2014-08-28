@@ -8,6 +8,7 @@
 namespace Earls\OxPeckerDataBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 abstract class AdvancedCommand extends ContainerAwareCommand
 {
@@ -30,6 +31,10 @@ abstract class AdvancedCommand extends ContainerAwareCommand
      */
     protected function getStopWatch()
     {
+        if($this->getContainer()->has('debug.stopwatch') === FALSE){
+            $this->getContainer()->set('debug.stopwatch', new Stopwatch());
+        }
+
         return $this->getContainer()->get('debug.stopwatch');
     }
 
