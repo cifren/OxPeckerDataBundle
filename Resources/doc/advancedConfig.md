@@ -177,7 +177,7 @@ class IngredientUsageDataConfiguration extends DataConfiguration
     }
 
     //options, you can activate one action for now, which is Flamingo, if you want to Queue your command calls
-    protected function setOptions()
+    protected setOptions(array $defaultOption)
     {
         return array(
             'activate-flamingo' => true,

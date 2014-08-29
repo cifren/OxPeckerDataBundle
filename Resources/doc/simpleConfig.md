@@ -150,12 +150,12 @@ Here some example of calls :
 
 ```shell
 #example without param: (for a cron job for example)
-php app/console oxpecker:import datatier.recipe
+php app/console oxpecker:run datatier.recipe
 
 #example with param:
-php app/console oxpecker:import datatier.recipe recipe_id=1
+php app/console oxpecker:run datatier.recipe recipe_id=1
 
 #example for help:
-php app/console oxpecker:import datatier.recipe help
+php app/console oxpecker:run datatier.recipe help
 
 ```
