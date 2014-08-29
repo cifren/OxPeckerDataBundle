@@ -419,4 +419,4 @@ class IngredientUsageDataConfiguration extends DataConfiguration
 
 ```
 
-More information about [Flamingo](https://github.com/Earls/OxPeckerDataBundle/blob/master/Resources/doc/flamingo.md)
+More information about [Flamingo](flamingo.md)

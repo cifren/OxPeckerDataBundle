@@ -1,20 +1,20 @@
 Installation
 ============
 
-* [Installation] (https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/installation.md)
+* [Installation] (installation.md)
 
 Usage Documentation
 ===================
 
-* [First data table](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/simpleConfig.md)
-* [More Advanced data table](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/advancedConfig.md)
-* [Arguments](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/arguments.md)
-* [FlamingoQueueCommand](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/flamingo.md)
+* [First data table](simpleConfig.md)
+* [More Advanced data table](advancedConfig.md)
+* [Arguments](arguments.md)
+* [FlamingoQueueCommand](flamingo.md)
 
 Developer Documentation
 =======================
 
-* [How to make it your own](https://github.com/earls/OxPeckerDataBundle/blob/master/Resources/doc/dev.md)
+* [How to make it your own](dev.md)
 
 Improvements
 ============

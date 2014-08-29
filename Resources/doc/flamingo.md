@@ -1,9 +1,11 @@
 Flamingo usage
 ==============
 
-For more information about Flamingo you can go on the documentation [FlamingoCommandQueue](https://github.com/Earls/FlamingoCommandQueue/blob/master/README.md)
+For more information about Flamingo you can go on the documentation 
+[FlamingoCommandQueue](https://github.com/Earls/FlamingoCommandQueue/blob/master/README.md)
 
-If you use it, you will have to install it [Flamingo installation](https://github.com/Earls/FlamingoCommandQueue/blob/master/Resources/doc/installation.md)
+If you use it, you will have to install it 
+[Flamingo installation](https://github.com/Earls/FlamingoCommandQueue/blob/master/Resources/doc/installation.md)
 
 Enable flamingo in your configuration:
 

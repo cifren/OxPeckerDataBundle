@@ -144,7 +144,9 @@ php app/console oxpecker:import service_name args
 ```
 - service_name: it is the name of your service, in our case it is `datatier.recipe`
 
-- args : it is the list of your arguments you want to send to your command, for example if you choose to give the Id of an ingredient, `ingredient_id=1582` for more details see [doc arguments](https://github.com/Earls/OxPeckerDataBundle/blob/master/Resources/doc/arguments.md)
+- args : it is the list of your arguments you want to send to your command, for example 
+if you choose to give the Id of an ingredient, `ingredient_id=1582` for more details 
+see [doc arguments](arguments.md)
 
 Here some example of calls :
 
