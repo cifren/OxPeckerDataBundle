@@ -48,6 +48,7 @@ class RunCommand extends AdvancedCommand
 
         $dataProcess = $this->getContainer()->get('oxpecker.data.process');
         $dataProcess->setLogger($this->getLogger());
+        
         $dataProcess->process($dataTierConfig, $args);
 
         //log system
@@ -59,6 +60,7 @@ class RunCommand extends AdvancedCommand
     protected function startScript(DataConfigurationInterface $dataTierConfig, $name, array $args)
     {
         $this->setStartTime();
+        $this->getLogger()->notice("Arguments: " . $this->getImplodeArguments($args));
         $dataTierConfigOptions = $dataTierConfig->getOptions();
 
         //run flamingo only if activate
@@ -72,7 +74,7 @@ class RunCommand extends AdvancedCommand
 
             $queueGroupName = null;
             $queueUniqueId = null;
-            
+
             //if an array means an array of option for Flamingo
             if (is_array($dataTierConfigOptions['activate-flamingo'])) {
                 $queueGroupName = $dataTierConfig->setQueueGroupName($name, $args);
@@ -174,6 +176,13 @@ class RunCommand extends AdvancedCommand
     protected function getLogs()
     {
         return $this->getLogger()->getLogs();
+    }
+
+    protected function getImplodeArguments(array $input)
+    {
+        return implode(', ', array_map(function ($v, $k) {
+                    return sprintf("%s='%s'", $k, $v);
+                }, $input, array_keys($input)));
     }
 
 }

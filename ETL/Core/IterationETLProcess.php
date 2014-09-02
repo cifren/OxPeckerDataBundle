@@ -6,6 +6,7 @@ use Knp\ETL\ExtractorInterface;
 use Knp\ETL\TransformerInterface;
 use Knp\ETL\LoaderInterface;
 use Knp\ETL\ContextInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class IterationETLProcess implements ETLProcessInterface
 {
@@ -102,7 +103,7 @@ class IterationETLProcess implements ETLProcessInterface
         return $this->logger;
     }
 
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 

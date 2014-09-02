@@ -7,21 +7,36 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Doctrine\ORM\EntityManager;
 
 class DataSourceManager
 {
 
+    /**
+     *
+     * @var EntityManager 
+     */
     protected $entityManager;
+    
+    /**
+     *
+     * @var LoggerInterface 
+     */
     protected $logger;
 
+    public function __construct(EntityManager $entityManager, LoggerInterface $logger)
+    {
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
+    }
+    
     /**
      * createTableFromDataSource
      * 
      * @param \Earls\OxPeckerDataBundle\DataSource\ORMDataSource $dataSource
      */
-    public function createTableFromDataSource(ORMDataSource $dataSource)
+    public function processDataSource(ORMDataSource $dataSource)
     {
         $entityName = $dataSource->getEntityName();
 
@@ -72,7 +87,7 @@ class DataSourceManager
         $classes = array(
             $this->getEntityManager()->getClassMetadata($entityName),
         );
-
+        
         try {
             $tool->createSchema($classes);
         } catch (\Exception $e) {
@@ -102,10 +117,13 @@ class DataSourceManager
         }
 
         $sqlSelect = $this->getSql($query);
-
         $sql = "INSERT INTO {$classMetadata->getTableName()} ($fieldsString) ({$sqlSelect})";
 
         $connection->query($sql);
+        $sqlRowCount = "SELECT ROW_COUNT() as count";
+        $stmt = $connection->query($sqlRowCount);
+        $result = $stmt->fetch();
+        $this->getLogger()->notice("{$result['count']} row inserted");
     }
 
     /**
@@ -187,10 +205,10 @@ class DataSourceManager
     /**
      * setLogger
      * 
-     * @param \Symfony\Bridge\Monolog\Logger $logger
+     * @param LoggerInterface $logger
      * @return \Earls\OxPeckerDataBundle\DataSource\DataSourceManager
      */
-    public function setLogger(Logger $logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 

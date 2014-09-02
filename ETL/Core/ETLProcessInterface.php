@@ -3,6 +3,7 @@
 namespace Earls\OxPeckerDataBundle\ETL\Core;
 
 use Knp\ETL\ContextInterface;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 interface ETLProcessInterface
 {
@@ -15,5 +16,5 @@ interface ETLProcessInterface
 
     public function getLogger();
 
-    public function setLogger($logger);
+    public function setLogger(LoggerInterface $logger);
 }

@@ -34,10 +34,11 @@ class DataProcess
      */
     protected $dataSourceManager;
 
-    public function __construct(EntityManager $entityManager, Logger $logger, DataSourceManager $dataSourceManager)
+    public function __construct(EntityManager $entityManager, Logger $logger)
     {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->dataSourceManager = new DataSourceManager($entityManager, $logger);
     }
 
     /**
@@ -49,12 +50,13 @@ class DataProcess
     public function process(DataConfigurationInterface $config, array $params)
     {
         $dataProcessContext = $this->createContext($params);
-        if ($config->getEntityManager()) {
-            $this->setEntityManager($config->getEntityManager());
-        }
 
         $this->getLogger()->notice("PreProcess");
         $config->preProcess($dataProcessContext);
+        
+        if ($config->getEntityManager()) {
+            $this->setEntityManager($config->getEntityManager());
+        }
 
         $etlProcesses = $config->getETLProcesses($dataProcessContext);
         $dataProcessContext->setEtlProcesses($etlProcesses);
@@ -78,10 +80,10 @@ class DataProcess
             if (!$etlProcess->getContext()) {
                 $etlProcess->setContext(new Context());
             }
-            if ($etlProcess instanceof SqlETLProcess) {
-                $etlProcess->setDatasourceManager($this->datasourceManager);
-            }
 
+            if ($etlProcess instanceof SqlETLProcess) {
+                $etlProcess->setDatasourceManager($this->getDatasourceManager());
+            }
             $etlProcess->process();
         }
     }
@@ -148,6 +150,33 @@ class DataProcess
         $this->logger = $logger;
 
         return $this;
+    }
+
+    /**
+     * 
+     * @param \Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager $datasourceManager
+     * @return \Earls\OxPeckerDataBundle\Core\DataProcess
+     */
+    public function setDatasourceManager(DataSourceManager $datasourceManager)
+    {
+        $this->dataSourceManager = $datasourceManager;
+
+        return $this;
+    }
+
+    /**
+     * 
+     * @return DataSourceManager 
+     * @throws \Exception
+     */
+    public function getDatasourceManager()
+    {
+        if (!$this->dataSourceManager) {
+            throw new \Exception('did you forget to setDatasourceManager ?');
+        }
+        $this->dataSourceManager->setEntityManager($this->getEntityManager());
+
+        return $this->dataSourceManager;
     }
 
 }

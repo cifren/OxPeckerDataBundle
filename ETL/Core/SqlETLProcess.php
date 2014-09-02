@@ -4,6 +4,8 @@ namespace Earls\OxPeckerDataBundle\ETL\Core;
 
 use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 use Knp\ETL\ContextInterface;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class SqlETLProcess implements ETLProcessInterface
 {
@@ -20,7 +22,7 @@ class SqlETLProcess implements ETLProcessInterface
 
     public function process()
     {
-        $this->getDatasourceManager()->createTableFromDataSource($this->datasource);
+        $this->getDatasourceManager()->processDataSource($this->datasource);
     }
 
     public function getContext()
@@ -43,7 +45,7 @@ class SqlETLProcess implements ETLProcessInterface
         return $this->logger;
     }
 
-    public function setLogger($logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
 
@@ -52,12 +54,16 @@ class SqlETLProcess implements ETLProcessInterface
 
     public function getDatasourceManager()
     {
+        if(!$this->datasourceManager){
+            throw new \Exception("Did you setDatasourceManager() ?");
+        }
         return $this->datasourceManager;
     }
 
-    public function setDatasourceManager($datasourceManager)
+    public function setDatasourceManager(DataSourceManager $datasourceManager)
     {
         $this->datasourceManager = $datasourceManager;
+        
         return $this;
     }
 
