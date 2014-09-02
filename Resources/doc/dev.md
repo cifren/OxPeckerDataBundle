@@ -15,20 +15,8 @@ see [How to Use Bundle Inheritance to Override Parts of a Bundle ](http://symfon
 
 Second will be to use services and override the id :
 
-For example if you desire to change the behaviour of `DataSourceManager`: 
+For example if you desire to change the behaviour of `Dataprocess`: 
     in your project, services.yml
-
-```yaml
-services:            
-    oxpecker.data.datasource.manager:
-        #your own class
-        class:      YourProject\AcmeBundle\Model\DataSourceManager
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@logger"
-            - "@newClassArgument"
-
-```
 
 Fast and easy, ready to go !!
 
