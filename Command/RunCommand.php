@@ -13,7 +13,8 @@ use Earls\OxPeckerDataBundle\Command\AdvancedCommand;
  */
 class RunCommand extends AdvancedCommand
 {
-
+    protected $cmdManager;
+    
     protected function configure()
     {
         parent::configure();
@@ -65,11 +66,11 @@ class RunCommand extends AdvancedCommand
 
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
-            $cmdManager = $this->getContainer()->get('flamingo.manager.command');
+            $this->cmdManager = $this->getContainer()->get('flamingo.manager.command');
 
             //set entity manager
             if ($dataTierConfig->getEntityManager()) {
-                $cmdManager->setEntityManager($dataTierConfig->getEntityManager());
+                $this->cmdManager->setEntityManager($dataTierConfig->getEntityManager());
             }
 
             $queueGroupName = null;
@@ -79,11 +80,11 @@ class RunCommand extends AdvancedCommand
             if (is_array($dataTierConfigOptions['activate-flamingo'])) {
                 $queueGroupName = $dataTierConfig->setQueueGroupName($name, $args);
                 $queueUniqueId = $dataTierConfig->setQueueUniqueId($name, $args);
-                $cmdManager->setOptions($dataTierConfigOptions['activate-flamingo']);
+                $this->cmdManager->setOptions($dataTierConfigOptions['activate-flamingo']);
             }
 
             //start manager on this instance
-            $cmdManager->start($name, $queueGroupName, $queueUniqueId);
+            $this->cmdManager->start($name, $queueGroupName, $queueUniqueId);
         }
     }
 
@@ -95,11 +96,8 @@ class RunCommand extends AdvancedCommand
 
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
-            //should keep all config from $this->start() function
-            $cmdManager = $this->getContainer()->get('flamingo.manager.command');
-
             //stop timer and log all information in database
-            $cmdManager->stop($this->getLogs());
+            $this->cmdManager->stop($this->getLogs());
         }
     }
 
