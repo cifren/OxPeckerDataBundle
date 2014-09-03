@@ -57,7 +57,6 @@ class DataSourceManager
      */
     public function dropTable($entityName)
     {
-        $this->getLogger()->notice("Drop Table $entityName");
         //very Slow
 //        $tool = new SchemaTool($this->getEntityManager());
 //        $classes = array(
@@ -70,6 +69,7 @@ class DataSourceManager
 
         try {
             $this->getEntityManager()->getConnection()->query($sql);
+            $this->getLogger()->notice("Drop Table $entityName");
         } catch (\Exception $e) {
             $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
         }
@@ -82,7 +82,6 @@ class DataSourceManager
      */
     public function createTable($entityName)
     {
-        $this->getLogger()->notice("Create Table $entityName");
         $tool = new SchemaTool($this->getEntityManager());
         $classes = array(
             $this->getEntityManager()->getClassMetadata($entityName),
@@ -90,6 +89,7 @@ class DataSourceManager
         
         try {
             $tool->createSchema($classes);
+            $this->getLogger()->notice("Create Table $entityName");
         } catch (\Exception $e) {
             $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
         }
