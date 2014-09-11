@@ -86,6 +86,7 @@ class DataProcess
             }
             $etlProcess->process();
         }
+        $this->getDatasourceManager()->clear();
     }
 
     /**

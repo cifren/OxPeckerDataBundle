@@ -9,6 +9,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Doctrine\ORM\EntityManager;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSourceType;
 
 class DataSourceManager
 {
@@ -18,19 +19,38 @@ class DataSourceManager
      * @var EntityManager 
      */
     protected $entityManager;
-    
+
     /**
      *
      * @var LoggerInterface 
      */
     protected $logger;
 
+    /**
+     *
+     * @var type 
+     */
+    protected $uniqueId;
+
+    /**
+     *
+     * @var type 
+     */
+    protected $derivedAliases = array();
+
+    /**
+     *
+     * @var type 
+     */
+    protected $temporaryTableNames = array();
+
     public function __construct(EntityManager $entityManager, LoggerInterface $logger)
     {
+        $this->uniqueId = uniqid();
         $this->entityManager = $entityManager;
         $this->logger = $logger;
     }
-    
+
     /**
      * createTableFromDataSource
      * 
@@ -42,12 +62,16 @@ class DataSourceManager
 
         $this->getLogger()->notice(" - $entityName");
         $options = $dataSource->getOptions();
-
-        if ($options['dropOnInit']) {
+        if ($options['typeTable'] == ORMDataSourceType::REGULAR_TABLE && $options['dropOnInit']) {
             $this->dropTable($entityName);
         }
-        $this->createTable($entityName);
-        $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
+
+        if ($options['typeTable'] != ORMDataSourceType::DERIVED_TABLE) {
+            $this->createTable($entityName, $options['typeTable'] == ORMDataSourceType::TEMPORARY_TABLE);
+            $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
+        } else {
+            $this->createDerivedAliases($entityName, $this->getSql($dataSource->getQuery()));
+        }
     }
 
     /**
@@ -80,16 +104,35 @@ class DataSourceManager
      * 
      * @param string $entityName
      */
-    public function createTable($entityName)
+    public function createTable($entityName, $temporary = false)
     {
+        $classMetaData = $this->getEntityManager()->getClassMetadata($entityName);
+
+        if ($temporary) {
+            //create temporary and unique name
+            $originTableName = $classMetaData->getTableName();
+            $newTableName = $originTableName . $this->uniqueId;
+            $classMetaData->setTableName($newTableName);
+
+            //store information
+            $this->temporaryTableNames[$entityName]['origin'] = $originTableName;
+            $this->temporaryTableNames[$entityName]['new'] = $newTableName;
+        }
         $tool = new SchemaTool($this->getEntityManager());
         $classes = array(
-            $this->getEntityManager()->getClassMetadata($entityName),
+            $classMetaData,
         );
-        
+        $sql = $tool->getCreateSchemaSql($classes)[0];
+
+        //if temporary table
+        if ($temporary) {
+            $sql = str_replace('CREATE TABLE ', 'CREATE TEMPORARY TABLE ', $sql);
+        }
+        //try to do it, if not, means table already exist
         try {
-            $tool->createSchema($classes);
-            $this->getLogger()->notice("Create Table $entityName");
+            $conn = $this->getEntityManager()->getConnection();
+            $conn->executeQuery($sql);
+            $this->getLogger()->notice("Create " . (!$temporary? : 'Temporary') . " Table $entityName");
         } catch (\Exception $e) {
             $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
         }
@@ -124,6 +167,15 @@ class DataSourceManager
         $stmt = $connection->query($sqlRowCount);
         $result = $stmt->fetch();
         $this->getLogger()->notice("{$result['count']} row inserted");
+    }
+
+    protected function createDerivedAliases($entityName, $query)
+    {
+        if (preg_match('/' . ORMDataSource::DERIVED_ALIAS . '/', $entityName) != true) {
+            throw new \Exception("The entityName '{$entityName}' should contain '" . ORMDataSource::DERIVED_ALIAS . "' at the beginning of the name");
+        }
+
+        $this->derivedAliases[$entityName] = $query;
     }
 
     /**
@@ -174,14 +226,35 @@ class DataSourceManager
      */
     protected function getSql($query)
     {
+        $isSqlQuery = true;
         if ($query instanceof QueryBuilder) {
             $query = $query->getQuery();
+            $isSqlQuery = false;
         }
 
         if ($query instanceof Query) {
             $sql = $query->getSql();
+            $isSqlQuery = false;
         } else {
             $sql = $query;
+        }
+
+        //apply name of entity for temporary table
+        if ($isSqlQuery && preg_match("/%[^%]*%/", $sql, $matches)) {
+            foreach ($matches as $match) {
+                if (isset($this->temporaryTableNames[substr($match, 1, -1)])) {
+                    $sql = str_replace($match, $this->temporaryTableNames[substr($match, 1, -1)]['new'], $sql);
+                }
+            }
+        }
+
+        //replace derived alias by sql statement
+        if (preg_match_all("/%" . ORMDataSource::DERIVED_ALIAS . "[^%]*%/", $sql, $matches)) {
+            foreach ($matches[0] as $match) {
+                if (isset($this->derivedAliases[substr($match, 1, -1)])) {
+                    $sql = str_replace($match, "(" . $this->derivedAliases[substr($match, 1, -1)] . ")", $sql);
+                }
+            }
         }
 
         return $sql;
@@ -213,6 +286,30 @@ class DataSourceManager
         $this->logger = $logger;
 
         return $this;
+    }
+
+    public function getDerivedAliases()
+    {
+        return $this->derivedAliases;
+    }
+
+    public function getTemporaryTableNames()
+    {
+        return $this->derivedAliases;
+    }
+
+    public function clear()
+    {
+        //put back entities used, like doctrine definition
+        foreach ($this->temporaryTableNames as $key => $tableName) {
+            $classMetaData = $this->getEntityManager()->getClassMetadata($key);
+            $classMetaData->setTableName($tableName['origin']);
+        }
+
+        //clear all variables
+        $this->temporaryTableNames = array();
+        $this->derivedAliases = array();
+        $this->uniqueId = uniqid();
     }
 
 }

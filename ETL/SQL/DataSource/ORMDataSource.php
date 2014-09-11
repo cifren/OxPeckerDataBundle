@@ -5,18 +5,21 @@ namespace Earls\OxPeckerDataBundle\ETL\SQL\DataSource;
 class ORMDataSource extends DataSource
 {
 
+    const DERIVED_ALIAS = 'DerivedDataOx:';
+
     protected $entityName;
     protected $mapping;
     protected $query;
     protected $options = array(
-        'dropOnInit' => true
+        'dropOnInit' => true,
+        'typeTable' => ORMDataSourceType::REGULAR_TABLE
     );
 
     /**
      * __construct
      * 
-     * @param string $entityName
      * @param string|\Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query
+     * @param string $entityName
      * @param array $mapping
      * @param array $options
      */
