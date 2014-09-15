@@ -201,10 +201,10 @@ public function getETLProcesses(Context $context)
   $etlProcesses[] = new SqlETLProcess(
         /* 
          * If you use QueryBuilder or Query, you will give the name of the entity, however if you use SQL, you will have 
-         * to get the name of the table of the entity via the EntityManager, like $this->getEntityManager()->getClassMetadata($entityName)->getTableName()
+         * to get the entity between %name%, automatically OxPecker will replace it by the tableName
          */
-        'SELECT s.price, s.cost, s.contribution, g.name FROM SalesPerWeek as s INNER JOIN SalGroup as g ON s.groupItemId = g.id', 
-        'RptSalesPerWeekAndGroup', 
+        'SELECT s.price, s.cost, s.contribution, g.name FROM %SalesPerWeek% as s INNER JOIN SalGroup as g ON s.groupItemId = g.id', 
+        'RptSalesPerWeekAndGroup',
         array('price', 'cost', 'contribution'), // same thing for all those lines
         array('dropOnInit' => false) //type by default regular table
   );
@@ -214,11 +214,10 @@ public function getETLProcesses(Context $context)
 }
 ```
 
-Each Temporary table will have unique ID in the database, this is because when you want 2 scripts 
-at the same time you don't want to work on the same tables and cross the data. But this is 
-really easy to use via the EntityManager. 
+####TIPS 1:
+    Each Temporary table will have unique ID in the database, this is because when you want 2 scripts at the same time you don't want to work on the same tables and cross the data.
 
-####TIPS:
+####TIPS 2:
     OxPecker will modify the table name temporarily of the entity and put it back at the end of the data treatment.
 
 Declare Derived table

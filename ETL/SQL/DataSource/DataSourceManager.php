@@ -67,7 +67,6 @@ class DataSourceManager
         }
 
         if ($options['tableType'] != ORMDataSourceType::DERIVED_TABLE) {
-          var_dump($options['tableType']);
             $this->createTable($entityName, $options['tableType'] == ORMDataSourceType::TEMPORARY_TABLE);
             $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
         } else {
@@ -240,9 +239,10 @@ class DataSourceManager
             $sql = $query;
         }
 
-        //apply name of entity for temporary table
-        if ($isSqlQuery && preg_match("/%[^%]*%/", $sql, $matches)) {
-            foreach ($matches as $match) {
+        //apply table name from entity for temporary table
+        if ($isSqlQuery && preg_match_all("/%[^%]*%/", $sql, $matches)) {
+          var_dump($matches);
+            foreach ($matches[0] as $match) {
                 if (isset($this->temporaryTableNames[substr($match, 1, -1)])) {
                     $sql = str_replace($match, $this->temporaryTableNames[substr($match, 1, -1)]['new'], $sql);
                 }
@@ -257,6 +257,7 @@ class DataSourceManager
                 }
             }
         }
+        echo "$sql";
 
         return $sql;
     }
