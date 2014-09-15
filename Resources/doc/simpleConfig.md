@@ -134,6 +134,132 @@ services:
 
 The name of your service `datatier.recipe`, will be the key of the call from the console.
 
+Table type
+==========
+
+You can add an option when you create your `SqlETLProcess`, this option will give the type of 
+table you want to use during the process. 
+
+3 Types Exists :
+- Regular table (default when null)
+- Temporary table, create temporary table, full control over the table, you can 
+redefined all indexes and all column you want to use. Heavier for the server.
+- Derived table, create a derived table in your SQL statement which is a simple 
+SubRequest, completely accepted by SQL engine and avoid useless database / hard drive work
+
+For more information about the difference between temporary and derived table, see this page http://www.sql-server-performance.com/2002/derived-temp-tables/
+
+When you use Derived table, you will have to use an alias in you sql statement in order to use this in your code 
+
+Declare Regular table
+```php
+public function getETLProcesses(Context $context)
+{
+  //...
+  $etlProcesses[] = new SqlETLProcess(
+        $this->getSqlSalesPerWeek(), // sql statement, Extractor / Transformer
+        'RptSalesPerWeek',  // Entity, Loader
+        array('price', 'cost', 'contribution'), // Mapping SQL <=> Entity
+        array('dropOnInit' => false)  //options
+  );
+  //...
+}
+```
+
+Declare Temporary table
+```php
+public function getETLProcesses(Context $context)
+{
+  //...
+  $etlProcesses[] = new SqlETLProcess(
+        $this->getSqlSalesPerWeek(), 
+        'RptSalesPerWeek', 
+        array('price', 'cost', 'contribution'), // same thing for all those lines
+        array('typeTable' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
+  );
+  //...
+}
+```
+
+Temporary table will be used like Regular Table, at the difference where the database connection is close, Temporary are deleted automatically.
+
+Use Regular / Temporary  table
+```php
+public function getETLProcesses(Context $context)
+{
+  //...
+
+  //temporary table
+  $etlProcesses[] = new SqlETLProcess(
+        'SELECT priceItem, costItem, contributionItem, weekid, groupItemId FROM sales_table GROUP BY weekId', // can be QueryBuilder, Query or SQL
+        'SalesPerWeek', 
+        array('price', 'cost', 'contribution', 'weekId', 'groupId'), // same thing for all those lines
+        array('typeTable' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
+  );
+
+  //regular table
+  $etlProcesses[] = new SqlETLProcess(
+        /* This SQL will depend on the structure of your Entity 'SalesPerWeek'
+         * You can call in your config the temporary table like this, same works for regular table
+         */
+        'SELECT s.price, s.cost, s.contribution, g.name FROM SalesPerWeek as s INNER JOIN SalGroup as g ON s.groupItemId = g.id', 
+        'RptSalesPerWeekAndGroup', 
+        array('price', 'cost', 'contribution'), // same thing for all those lines
+        array('dropOnInit' => false) //type by default regular table
+  );
+
+  return $etlProcesses;
+  //...
+}
+```
+
+Declare Derived table
+```php
+public function getETLProcesses(Context $context)
+{
+  //...
+  $etlProcesses[] = new SqlETLProcess(
+        $this->getSqlSalesPerWeek(), //Extractor/Transformer
+        ORMDataSource::DERIVED_ALIAS . 'RptFgStore', //Name of the alias
+        array(), // no mapping, no need
+        array('typeTable' => ORMDataSourceType::DERIVED_TABLE) //Give types
+  );
+  //...
+}
+```
+
+Use Derived table
+```php
+public function getETLProcesses(Context $context)
+{
+  //...
+  //derived table
+  $etlProcesses[] = new SqlETLProcess(
+        'SELECT priceItem, costItem, contributionItem, weekid, groupItemId FROM sales_table GROUP BY weekId', 
+        ORMDataSource::DERIVED_ALIAS . 'RptFgStore', //Name of the alias, should always start with 'DerivedDataOx:' contained by the constant
+        array(), // no mapping, no need
+        array('typeTable' => ORMDataSourceType::DERIVED_TABLE) //Give types
+  );
+
+  //regular table
+  $etlProcesses[] = new SqlETLProcess(
+        /* This SQL will depend on the structure of your Entity 'SalesPerWeek' 
+         * You can call in your config the temporary table like this, same works for regular table
+         * Can only be SQL statement but not QueryBuilder or Query when you use Derived tables Aliases
+         */
+        'SELECT s.priceItem, s.costItem, s.contributionItem, g.name FROM DerivedDataOx:RptFgStore as s INNER JOIN SalGroup as g ON s.groupItemId = g.id', 
+        'RptSalesPerWeekAndGroup', 
+        array('price', 'cost', 'contribution'), 
+        array('dropOnInit' => false) //type by default regular table
+  );
+
+  return $etlProcesses;
+  //...
+}
+
+```
+
+
 Command
 =======
 
