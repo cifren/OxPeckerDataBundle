@@ -67,6 +67,7 @@ class DataSourceManager
         }
 
         if ($options['typeTable'] != ORMDataSourceType::DERIVED_TABLE) {
+          var_dump($options['typeTable']);
             $this->createTable($entityName, $options['typeTable'] == ORMDataSourceType::TEMPORARY_TABLE);
             $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
         } else {

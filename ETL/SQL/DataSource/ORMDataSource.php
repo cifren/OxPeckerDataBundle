@@ -12,7 +12,7 @@ class ORMDataSource extends DataSource
     protected $query;
     protected $options = array(
         'dropOnInit' => true,
-        'typeTable' => ORMDataSourceType::REGULAR_TABLE
+        'tableType' => ORMDataSourceType::REGULAR_TABLE
     );
 
     /**
