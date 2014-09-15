@@ -175,7 +175,7 @@ public function getETLProcesses(Context $context)
         $this->getSqlSalesPerWeek(), 
         'RptSalesPerWeek', 
         array('price', 'cost', 'contribution'), // same thing for all those lines
-        array('typeTable' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
+        array('tableType' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
   );
   //...
 }
@@ -194,7 +194,7 @@ public function getETLProcesses(Context $context)
         'SELECT priceItem, costItem, contributionItem, weekid, groupItemId FROM sales_table GROUP BY weekId', // can be QueryBuilder, Query or SQL
         'SalesPerWeek', 
         array('price', 'cost', 'contribution', 'weekId', 'groupId'), // same thing for all those lines
-        array('typeTable' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
+        array('tableType' => ORMDataSourceType::TEMPORARY_TABLE) //Give types
   );
 
   //regular table
@@ -222,7 +222,7 @@ public function getETLProcesses(Context $context)
         $this->getSqlSalesPerWeek(), //Extractor/Transformer
         ORMDataSource::DERIVED_ALIAS . 'RptFgStore', //Name of the alias
         array(), // no mapping, no need
-        array('typeTable' => ORMDataSourceType::DERIVED_TABLE) //Give types
+        array('tableType' => ORMDataSourceType::DERIVED_TABLE) //Give types
   );
   //...
 }
@@ -238,7 +238,7 @@ public function getETLProcesses(Context $context)
         'SELECT priceItem, costItem, contributionItem, weekid, groupItemId FROM sales_table GROUP BY weekId', 
         ORMDataSource::DERIVED_ALIAS . 'RptFgStore', //Name of the alias, should always start with 'DerivedDataOx:' contained by the constant
         array(), // no mapping, no need
-        array('typeTable' => ORMDataSourceType::DERIVED_TABLE) //Give types
+        array('tableType' => ORMDataSourceType::DERIVED_TABLE) //Give types
   );
 
   //regular table

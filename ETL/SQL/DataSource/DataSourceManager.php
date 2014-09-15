@@ -62,13 +62,13 @@ class DataSourceManager
 
         $this->getLogger()->notice(" - $entityName");
         $options = $dataSource->getOptions();
-        if ($options['typeTable'] == ORMDataSourceType::REGULAR_TABLE && $options['dropOnInit']) {
+        if ($options['tableType'] == ORMDataSourceType::REGULAR_TABLE && $options['dropOnInit']) {
             $this->dropTable($entityName);
         }
 
-        if ($options['typeTable'] != ORMDataSourceType::DERIVED_TABLE) {
-          var_dump($options['typeTable']);
-            $this->createTable($entityName, $options['typeTable'] == ORMDataSourceType::TEMPORARY_TABLE);
+        if ($options['tableType'] != ORMDataSourceType::DERIVED_TABLE) {
+          var_dump($options['tableType']);
+            $this->createTable($entityName, $options['tableType'] == ORMDataSourceType::TEMPORARY_TABLE);
             $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
         } else {
             $this->createDerivedAliases($entityName, $this->getSql($dataSource->getQuery()));
