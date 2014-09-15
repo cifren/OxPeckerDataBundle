@@ -241,7 +241,6 @@ class DataSourceManager
 
         //apply table name from entity for temporary table
         if ($isSqlQuery && preg_match_all("/%[^%]*%/", $sql, $matches)) {
-          var_dump($matches);
             foreach ($matches[0] as $match) {
                 if (isset($this->temporaryTableNames[substr($match, 1, -1)])) {
                     $sql = str_replace($match, $this->temporaryTableNames[substr($match, 1, -1)]['new'], $sql);
@@ -257,7 +256,6 @@ class DataSourceManager
                 }
             }
         }
-        echo "$sql";
 
         return $sql;
     }
