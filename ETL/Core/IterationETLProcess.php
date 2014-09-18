@@ -6,9 +6,10 @@ use Knp\ETL\ExtractorInterface;
 use Knp\ETL\TransformerInterface;
 use Knp\ETL\LoaderInterface;
 use Knp\ETL\ContextInterface;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
+use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 
-class IterationETLProcess implements ETLProcessInterface
+class IterationETLProcess implements ETLProcessInterface, LoggableInterface
 {
 
     protected $context;
@@ -17,24 +18,36 @@ class IterationETLProcess implements ETLProcessInterface
     protected $loader;
     protected $logger;
 
-    public function __construct(ExtractorInterface $extractor, array $transformers, LoaderInterface $loader)
+    public function __construct(ExtractorInterface $extractor, array $transformers, LoaderInterface $loader, LoggerInterface $logger = null)
     {
         $this->extractor = $extractor;
         $this->transformers = $transformers;
         $this->loader = $loader;
+        $this->setLogger($logger);
     }
 
     public function process()
     {
         $context = $this->getContext();
         $extractor = $this->getExtractor();
+        $extractor->setLogger($this->getLogger());
         $transformers = $this->getTransformers();
+        foreach ($transformers as $tranformer) {
+            $tranformer->setLogger($this->getLogger());
+        }
         $loader = $this->getLoader();
+        $loader->setLogger($this->getLogger());
 
         $i = 0;
         if (!$extractor) {
+            $this->logger->notice("No Extractor");
             return null;
         }
+
+        if (null !== $this->logger) {
+            $this->logger->notice("Start Iteration ETL Process");
+        }
+        
         while (null !== $input = $extractor->extract($this->getContext())) {
             foreach ($transformers as $transformer) {
                 $output = $transformer->transform($input, $context);
@@ -45,7 +58,10 @@ class IterationETLProcess implements ETLProcessInterface
             $loader->load($input, $context);
             $i++;
         }
-        echo "count : $i\n";
+
+        if (null !== $this->logger) {
+            $this->logger->notice(sprintf("ETL executed on %d items", $i));
+        }
 
         $loader->flush($context);
     }

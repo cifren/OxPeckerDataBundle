@@ -5,7 +5,7 @@ namespace Earls\OxPeckerDataBundle\ETL\Core;
 use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 use Knp\ETL\ContextInterface;
 use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 class SqlETLProcess implements ETLProcessInterface
 {
