@@ -1,13 +1,15 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\ETL\Loader\Doctrine;
+namespace Earls\OxPeckerDataBundle\ETL\Iteration\Loader\Doctrine;
 
 use Psr\Log\LoggerAwareTrait;
 use Doctrine\ORM\EntityManager;
 use Knp\ETL\ContextInterface;
 use Knp\ETL\LoaderInterface;
+use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
+use Psr\Log\LoggerInterface;
 
-class ORMLoader implements LoaderInterface
+class ORMLoader implements LoaderInterface, LoggableInterface
 {
 
     use LoggerAwareTrait;
@@ -30,7 +32,6 @@ class ORMLoader implements LoaderInterface
         }
 
         $this->entityManager->persist($entity);
-
         $this->counter++;
 
         if ($this->counter % $this->flushEvery === 0) {
@@ -44,7 +45,6 @@ class ORMLoader implements LoaderInterface
 
     public function flush(ContextInterface $context)
     {
-        echo "flush\n";
         $this->entityManager->flush();
         if (null !== $this->logger) {
             $this->logger->debug(sprintf('flush after %d persist hits', $this->counter));
@@ -57,6 +57,27 @@ class ORMLoader implements LoaderInterface
         if (null !== $this->logger) {
             $this->logger->debug(sprintf('clear after %d persist hits', $this->counter));
         }
+    }
+
+    /**
+     * 
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * 
+     * @param LoggerInterface $logger
+     * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
 }

@@ -1,12 +1,14 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\ETL\Transformer;
+namespace Earls\OxPeckerDataBundle\ETL\Iteration\Transformer;
 
 use Knp\ETL\TransformerInterface;
 use Knp\ETL\Transformer\DataMap;
 use Knp\ETL\ContextInterface;
+use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
+use Psr\Log\LoggerInterface;
 
-class ObjectToObjectTransformer implements TransformerInterface
+class ObjectToObjectTransformer implements TransformerInterface, LoggableInterface
 {
 
     private $className;
@@ -21,12 +23,32 @@ class ObjectToObjectTransformer implements TransformerInterface
     public function transform($data, ContextInterface $context)
     {
         $object = new $this->className;
-        
+
 
         $this->mapper->set($data, $object);
-        echo "{$object->getId()}\n";
 
         return $object;
+    }
+
+    /**
+     * 
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * 
+     * @param LoggerInterface $logger
+     * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
 }
