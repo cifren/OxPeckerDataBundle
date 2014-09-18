@@ -75,6 +75,7 @@ class FirstReportDataConfiguration extends DataConfiguration
     public function getETLProcesses(Context $context)
     {
         $etlProcesses = array(
+            //choose your ETLProcess
             new SqlETLProcess(
                 'SELECT ing_name, recipe_name '. //Transformation
                 'FROM ingredient i JOIN recipe r ON i.fk_recipe_id = r.id', //FROM: Extraction
@@ -98,9 +99,18 @@ class FirstReportDataConfiguration extends DataConfiguration
 }
 ```
 
+You have 2 options for ETLProcess:
+- IterationETLProcess: Work from any type of file to any type of file, slower but more possibility. See more [here](iterationETLProcess.md)
+- SqlETLProcess: work only on database, form a table to another, fast and easy to use via SQL solutions. See more [here](sqlETLProcess.md)
+
+####TIPS
+    All of this Processes depends on your needs, if you work only on database, SqlETLProcess will be your choice, fast and easy to use.
+    If you extract data from CSV to Database, you choice will be IterationETLProcess. CsvExtractor + ObjectTransformer + ORMLoader/DBALLoader
+    For complexe structure, a mix between IterationETLProcess at first, after SqlETLProcess for heavy transformation, and finally IterationETLProcess for other details
+
 And that's it your config is done.
 
-In the constructor of `SqlETLProcess` you can use `Raw sql` statment, `Doctrine\ORM\Query` or `Doctrine\DBAL\Query\QueryBuilder`.
+In the constructor of `SqlETLProcess` you can use `Raw sql` statement, `Doctrine\ORM\Query` or `Doctrine\DBAL\Query\QueryBuilder`.
 
 As you can see, **ETL** is still used :
 - **Extraction** : By the FROM
