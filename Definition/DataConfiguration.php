@@ -125,11 +125,20 @@ class DataConfiguration implements DataConfigurationInterface
         return $this;
     }
 
+    /**
+     * 
+     * @return EntityManager
+     */
     public function getEntityManager()
     {
         return $this->entityManager;
     }
 
+    /**
+     * 
+     * @param EntityManager $entityManager
+     * @return \Earls\OxPeckerDataBundle\Definition\DataConfiguration
+     */
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
