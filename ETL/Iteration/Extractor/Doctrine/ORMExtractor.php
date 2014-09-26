@@ -13,7 +13,17 @@ use Psr\Log\LoggerInterface;
 class ORMExtractor extends BaseExtractor implements LoggableInterface
 {
 
+    /**
+     *
+     * @var \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder 
+     */
     protected $query;
+    
+    /**
+     *
+     * @var int 
+     */
+    protected $count;
 
     /**
      * Could be a Query or a QueryBuilder
@@ -30,7 +40,7 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
      * Seems to have a bug in Knp Bundle, correctif here
      * 
      * @param \Knp\ETL\ContextInterface $context
-     * @return type
+     * @return \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder 
      */
     public function extract(ContextInterface $context)
     {
@@ -39,6 +49,10 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
         return $current[0];
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getQuery()
     {
         if ($this->query instanceof \Doctrine\ORM\QueryBuilder) {
@@ -67,6 +81,15 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
         $this->logger = $logger;
 
         return $this;
+    }
+
+    public function getCount()
+    {
+        if (!$this->count) {
+            $this->count = count($this->getQuery()->getResult());
+        }
+
+        return $this->count;
     }
 
 }

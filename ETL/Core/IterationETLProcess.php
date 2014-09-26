@@ -12,10 +12,34 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 class IterationETLProcess implements ETLProcessInterface, LoggableInterface
 {
 
+    /**
+     *
+     * @var ContextInterface 
+     */
     protected $context;
+
+    /**
+     *
+     * @var ExtractorInterface 
+     */
     protected $extractor;
+
+    /**
+     *
+     * @var TransformerInterface 
+     */
     protected $transformers;
+
+    /**
+     *
+     * @var LoaderInterface 
+     */
     protected $loader;
+
+    /**
+     *
+     * @var LoggerInterface 
+     */
     protected $logger;
 
     public function __construct(ExtractorInterface $extractor, array $transformers, LoaderInterface $loader, LoggerInterface $logger = null)
@@ -47,7 +71,12 @@ class IterationETLProcess implements ETLProcessInterface, LoggableInterface
         if (null !== $this->logger) {
             $this->logger->notice("Start Iteration ETL Process");
         }
-        
+
+        if (null !== $this->logger) {
+            $countItems = $extractor->getCount();
+            $this->logger->notice(sprintf("Will extract %d items", $countItems));
+        }
+
         while (null !== $input = $extractor->extract($this->getContext())) {
             foreach ($transformers as $transformer) {
                 $output = $transformer->transform($input, $context);

@@ -155,7 +155,7 @@ table you want to use during the process.
 - Temporary table, create temporary table, full control over the table, you can 
 redefined all indexes and all column you want to use. Heavier for the server.
 - Derived table, create a derived table in your SQL statement which is a simple 
-SubRequest, completely accepted by SQL engine and avoid useless database / hard drive work
+SubRequest, completely accepted by SQL engine and avoid useless database / hard drive work, can be very slow with full table though
 
 For more information about the difference between temporary and derived table, see this page http://www.sql-server-performance.com/2002/derived-temp-tables/
 

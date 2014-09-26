@@ -5,12 +5,14 @@ namespace Earls\OxPeckerDataBundle\Definition;
 use Doctrine\ORM\EntityManager;
 use Earls\OxPeckerDataBundle\Definition\Context;
 use Symfony\Bridge\Monolog\Logger;
+use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 
 class DataConfiguration implements DataConfigurationInterface
 {
 
     protected $entityManager;
     protected $defaultOptions;
+    protected $derivedAlias = ORMDataSource::DERIVED_ALIAS;
 
     /**
      *

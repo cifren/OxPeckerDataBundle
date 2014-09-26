@@ -9,6 +9,7 @@ use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager;
 use Earls\OxPeckerDataBundle\Definition\Context as DataProcessContext;
 use Symfony\Bridge\Monolog\Logger;
 use Earls\OxPeckerDataBundle\ETL\Core\SqlETLProcess;
+use Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface;
 
 /**
  * Earls\OxPeckerDataBundle\Core\DataProcess
@@ -34,11 +35,18 @@ class DataProcess
      */
     protected $dataSourceManager;
 
-    public function __construct(EntityManager $entityManager, Logger $logger)
+    /**
+     *
+     * @var StopwatchInterface 
+     */
+    protected $stopWatch;
+
+    public function __construct(EntityManager $entityManager, Logger $logger, StopwatchInterface $stopWatch)
     {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->dataSourceManager = new DataSourceManager($entityManager, $logger);
+        $this->stopWatch = $stopWatch;
     }
 
     /**
@@ -52,8 +60,11 @@ class DataProcess
         $dataProcessContext = $this->createContext($params);
 
         $this->getLogger()->notice("PreProcess");
+
+        $this->stopWatch->start('preProcess');
         $config->preProcess($dataProcessContext);
-        
+        $this->stopWatch->stop('preProcess');
+        $this->getLogger()->notice(sprintf('Executed in %s', $this->stopWatch->getFinishTime('preProcess')->format('%hh %im %ss')));
         if ($config->getEntityManager()) {
             $this->setEntityManager($config->getEntityManager());
         }
@@ -62,10 +73,14 @@ class DataProcess
         $dataProcessContext->setEtlProcesses($etlProcesses);
 
         $this->getLogger()->notice("Execute ETL Processes");
+
         $this->executeETLProcesses($etlProcesses);
 
         $this->getLogger()->notice("PostProcess");
+        $this->stopWatch->start('postProcess');
         $config->postProcess($dataProcessContext);
+        $this->stopWatch->stop('postProcess');
+        $this->getLogger()->notice(sprintf('Executed in %s', $this->stopWatch->getFinishTime('postProcess')->format('%hh %im %ss')));
     }
 
     /**
@@ -84,7 +99,10 @@ class DataProcess
             if ($etlProcess instanceof SqlETLProcess) {
                 $etlProcess->setDatasourceManager($this->getDatasourceManager());
             }
+            $this->stopWatch->start('etlProcess');
             $etlProcess->process();
+            $this->stopWatch->stop('etlProcess');
+            $this->getLogger()->notice(sprintf('Executed in %s', $this->stopWatch->getFinishTime('etlProcess')->format('%hh %im %ss')));
         }
         $this->getDatasourceManager()->clear();
     }
