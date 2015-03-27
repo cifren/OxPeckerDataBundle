@@ -103,6 +103,7 @@ class RunCommand extends AdvancedCommand
 
             //start manager on this instance
             $this->cmdManager->start($name, $queueGroupName, $queueUniqueId);
+            $this->cmdManager->saveProgress($this->getLogs());
         }
     }
 
