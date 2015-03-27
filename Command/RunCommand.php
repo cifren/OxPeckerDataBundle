@@ -13,8 +13,9 @@ use Earls\OxPeckerDataBundle\Command\AdvancedCommand;
  */
 class RunCommand extends AdvancedCommand
 {
+
     protected $cmdManager;
-    
+
     protected function configure()
     {
         parent::configure();
@@ -49,9 +50,19 @@ class RunCommand extends AdvancedCommand
 
         $dataProcess = $this->getContainer()->get('oxpecker.data.process');
         $dataProcess->setLogger($this->getLogger());
-        
-        $dataProcess->process($dataTierConfig, $args);
 
+        try {
+            $dataProcess->process($dataTierConfig, $args);
+        } catch (\Exception $e) {
+            $dataTierConfigOptions = $dataTierConfig->getOptions();
+            if ($dataTierConfigOptions['activate-flamingo']) {
+                $this->getLogger()->notice($e->getMessage());
+                $this->getLogger()->notice($e->getTraceAsString());
+            } else {
+                echo $e->getMessage();
+                echo $this->getLogger()->notice($e->getTraceAsString());
+            }
+        }
         //log system
         $this->stopScript($dataTierConfig);
 
