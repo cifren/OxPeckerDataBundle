@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Earls\OxPeckerDataBundle\Definition\DataConfigurationInterface;
-use Earls\OxPeckerDataBundle\Command\AdvancedCommand;
+use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 
 /**
  * Earls\OxPeckerDataBundle\Command\RunCommand
@@ -14,6 +14,10 @@ use Earls\OxPeckerDataBundle\Command\AdvancedCommand;
 class RunCommand extends AdvancedCommand
 {
 
+    /**
+     *
+     * @var \Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
+     */
     protected $cmdManager;
 
     protected function configure()
@@ -35,12 +39,13 @@ class RunCommand extends AdvancedCommand
         $dataTierConfig->setLogger($this->getLogger());
         if (!$dataTierConfig) {
             throw new \InvalidArgumentException(sprintf('No data tier configuration has been find with name \'%s\' ', $input->getArgument('namedatatier')));
-        } elseIf (!$dataTierConfig instanceof DataConfigurationInterface) {
+        } elseif (!$dataTierConfig instanceof DataConfigurationInterface) {
             throw new \InvalidArgumentException(sprintf('Service has been found but the class is not an instance of \'Earls\OxPeckerData\Report\SQLInterface\''));
         }
 
         if (isset($input->getArgument('args')[0]) && $input->getArgument('args')[0] == 'help') {
             $this->helpDisplay($input->getArgument('namedatatier'), $dataTierConfig->setParamsMapping(), $output);
+
             return true;
         }
         $args = $this->formatArguments($dataTierConfig->setParamsMapping(), $input->getArgument('args'));
@@ -51,20 +56,22 @@ class RunCommand extends AdvancedCommand
         $dataProcess = $this->getContainer()->get('oxpecker.data.process');
         $dataProcess->setLogger($this->getLogger());
 
+        $errorSignal = false;
         try {
             $dataProcess->process($dataTierConfig, $args);
         } catch (\Exception $e) {
             $dataTierConfigOptions = $dataTierConfig->getOptions();
             if ($dataTierConfigOptions['activate-flamingo']) {
-                $this->getLogger()->notice($e->getMessage());
+                $this->getLogger()->notice("An error happened: " . $e->getMessage());
                 $this->getLogger()->notice($e->getTraceAsString());
             } else {
                 echo $e->getMessage();
                 echo $this->getLogger()->notice($e->getTraceAsString());
             }
+            $errorSignal = true;
         }
         //log system
-        $this->stopScript($dataTierConfig);
+        $this->stopScript($dataTierConfig, $errorSignal);
 
         return true;
     }
@@ -99,7 +106,7 @@ class RunCommand extends AdvancedCommand
         }
     }
 
-    protected function stopScript(DataConfigurationInterface $dataTierConfig)
+    protected function stopScript(DataConfigurationInterface $dataTierConfig, $errorSignal = false)
     {
         $this->setEndTime();
         $this->noticeTime();
@@ -107,16 +114,21 @@ class RunCommand extends AdvancedCommand
 
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
+            if ($errorSignal) {
+                $status = FlgScriptStatus::STATE_FAILED;
+            } else {
+                $status = FlgScriptStatus::STATE_FINISHED;
+            }
             //stop timer and log all information in database
-            $this->cmdManager->stop($this->getLogs());
+            $this->cmdManager->stop($this->getLogs(), $status);
         }
     }
 
     /**
-     * Explicit arguments for a selected config, 
-     * 
-     * @param string $name
-     * @param array|null $mapping
+     * Explicit arguments for a selected config,
+     *
+     * @param string          $name
+     * @param array|null      $mapping
      * @param OutputInterface $output
      */
     protected function helpDisplay($name, $mapping, OutputInterface $output)
@@ -152,15 +164,15 @@ class RunCommand extends AdvancedCommand
 
     /**
      * Format arguments in order to contain default from config and return an array of arguments from the input
-     * 
+     *
      * If mapping is null, means no arguments required
      * If mapping is an empty array, means no arguments required and throw issue if there is
      * If mapping is an array, system will control each argument, throw issue if argument not in the list come from input
-     * 
-     * @param array $mappingArgs
-     * @param array $args
+     *
+     * @param  array $mappingArgs
+     * @param  array $args
      * @return array
-     * 
+     *
      * @throws \Exception
      */
     protected function formatArguments(array $mappingArgs = null, array $args)
