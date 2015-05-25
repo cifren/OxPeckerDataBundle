@@ -68,7 +68,7 @@ class DataSourceManager
 
         if ($options['tableType'] != ORMDataSourceType::DERIVED_TABLE) {
             $this->createTable($entityName, $options['tableType'] == ORMDataSourceType::TEMPORARY_TABLE);
-            $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping());
+            $this->insertTable($entityName, $dataSource->getQuery(), $dataSource->getMapping(), $options['commentMessage']);
         } else {
             $this->createDerivedAliases($entityName, $this->getSql($dataSource->getQuery()));
         }
@@ -145,7 +145,7 @@ class DataSourceManager
      * @param string|Query|QueryBuilder $query
      * @param array $mapping
      */
-    public function insertTable($entityName, $query, array $mapping)
+    public function insertTable($entityName, $query, array $mapping, $commentMessage)
     {
         $this->getLogger()->notice("Insert Table $entityName");
         $classMetadata = $this->getEntityManager()->getClassMetadata($entityName);
@@ -166,7 +166,7 @@ class DataSourceManager
         $sqlRowCount = "SELECT ROW_COUNT() as count";
         $stmt = $connection->query($sqlRowCount);
         $result = $stmt->fetch();
-        $this->getLogger()->notice("{$result['count']} row inserted");
+        $this->getLogger()->notice("{$result['count']} row inserted -- Comment: {$commentMessage}");
     }
 
     protected function createDerivedAliases($entityName, $query)
