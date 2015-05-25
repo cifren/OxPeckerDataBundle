@@ -64,9 +64,11 @@ class RunCommand extends AdvancedCommand
             if ($dataTierConfigOptions['activate-flamingo']) {
                 $this->getLogger()->notice("An error happened: " . $e->getMessage());
                 $this->getLogger()->notice($e->getTraceAsString());
-            } else {
-                echo $e->getMessage();
-                echo $this->getLogger()->notice($e->getTraceAsString());
+                $this->stopScript($dataTierConfig, $errorSignal);
+                throw $e;
+            } else {                
+                $this->stopScript($dataTierConfig, $errorSignal);
+                throw $e;
             }
             $errorSignal = true;
         }
