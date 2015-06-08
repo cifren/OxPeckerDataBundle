@@ -4,16 +4,17 @@ namespace Earls\OxPeckerDataBundle\ETL\Iteration\Transformer;
 
 use Knp\ETL\ContextInterface;
 
-class ObjectAlterationTransformer extends AlterationTransformer
+class ArrayAlterationTransformer extends AlterationTransformer
 {
 
     protected $transformerFunction;
 
     public function transform(array $array, ContextInterface $context)
     {
-        call_user_func($this->transformerFunction, $array);
+        $args = array_merge($array, $this->args);
+        $arrayTransformed = call_user_func_array($this->transformerFunction, $args);
 
-        return $object;
+        return $arrayTransformed;
     }
 
 }

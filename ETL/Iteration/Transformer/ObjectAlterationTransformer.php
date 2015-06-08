@@ -14,9 +14,15 @@ class ObjectAlterationTransformer extends AlterationTransformer
         if (!is_object) {
             throw new \Exception(sprintf('The argument need to an object, given "%s"', var_export($object, true)));
         }
-        call_user_func($this->transformerFunction, $object);
+        
+        $args = array_merge($object, $this->args);
+        $objectFromFunction = call_user_func_array($this->transformerFunction, $args);
 
-        return $object;
+        if(!empty($objectFromFunction)){
+            $objectTransformed = $objectFromFunction;
+        }
+        
+        return $objectTransformed;
     }
 
 }

@@ -18,15 +18,34 @@ use Knp\ETL\TransformerInterface;
 class AlterationTransformer implements TransformerInterface, LoggableInterface, TransformerInterface
 {
 
+    /**
+     *
+     * @var mixed
+     */
     protected $transformerFunction;
 
-    public function __construct($arg1, $arg2)
+    /**
+     *
+     * @var array
+     */
+    protected $args;
+
+    /**
+     * 
+     * @param mixed $arg1 can be a closure or a class
+     * @param mixed $arg2 can be an array of arguments or a method name
+     * @param array $arg3 will be an array of arguments
+     * @throws \Exception
+     */
+    public function __construct($arg1, $arg2 = null, $arg3 = null)
     {
         //if closure
         if ($arg1 instanceof \Closure) {
             $this->transformerFunction = $arg1;
+            $this->args = $arg2;
         } elseif (is_object($arg1)) { //if class and methodName
             $this->transformerFunction = array($arg1, $arg2);
+            $this->args = $arg3;
         } else {
             throw new \Exception(sprintf('The first argument can be only a closure or an object, given "%s"', var_export($arg1, true)));
         }
