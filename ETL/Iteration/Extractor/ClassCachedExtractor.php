@@ -1,19 +1,22 @@
 <?php
 
-namespace Earls\OxPeckerDataBundle\ETL\Iteration\Extractor\Doctrine;
+namespace Earls\OxPeckerDataBundle\ETL\Iteration\Extractor;
 
 use Knp\ETL\ExtractorInterface;
 use Knp\ETL\ContextInterface;
+use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Allow the user to add a class function loading in order to get an array of data
  */
-class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable
+class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable, LoggableInterface
 {
 
     protected $data;
     protected $aryFunction;
     protected $args;
+    protected $count;
 
     public function __construct($sourceObject, $functionName, $args = null)
     {
@@ -79,6 +82,36 @@ class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable
         $next = $this->getIterator()->next();
 
         return $next;
+    }
+
+    public function getCount()
+    {
+        if (!$this->count) {
+            $this->count = $this->count();
+        }
+
+        return $this->count;
+    }
+
+    /**
+     * 
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * 
+     * @param LoggerInterface $logger
+     * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
     }
 
 }

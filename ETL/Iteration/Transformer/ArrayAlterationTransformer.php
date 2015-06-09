@@ -3,15 +3,19 @@
 namespace Earls\OxPeckerDataBundle\ETL\Iteration\Transformer;
 
 use Knp\ETL\ContextInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 class ArrayAlterationTransformer extends AlterationTransformer
 {
 
     protected $transformerFunction;
 
-    public function transform(array $array, ContextInterface $context)
+    public function transform($array, ContextInterface $context)
     {
-        $args = array_merge($array, $this->args);
+        if(!is_array($array)){
+            throw new UnexpectedTypeException($array, 'array');
+        }
+        $args = array_merge(array($array), $this->args);
         $arrayTransformed = call_user_func_array($this->transformerFunction, $args);
 
         return $arrayTransformed;

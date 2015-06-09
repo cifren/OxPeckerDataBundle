@@ -2,7 +2,9 @@
 
 namespace Earls\OxPeckerDataBundle\Definition;
 
-interface ContextInterface
+use Knp\ETL\ContextInterface as baseContextInterface;
+
+interface ContextInterface extends baseContextInterface
 {
 
     /**

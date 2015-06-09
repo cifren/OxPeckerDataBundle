@@ -3,6 +3,10 @@
 namespace Earls\OxPeckerDataBundle\ETL\Iteration\Transformer;
 
 use Knp\ETL\TransformerInterface;
+use Knp\ETL\ContextInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +19,7 @@ use Knp\ETL\TransformerInterface;
  *
  * @author cifren
  */
-class AlterationTransformer implements TransformerInterface, LoggableInterface, TransformerInterface
+class AlterationTransformer implements TransformerInterface, LoggableInterface
 {
 
     /**
@@ -47,7 +51,7 @@ class AlterationTransformer implements TransformerInterface, LoggableInterface, 
             $this->transformerFunction = array($arg1, $arg2);
             $this->args = $arg3;
         } else {
-            throw new \Exception(sprintf('The first argument can be only a closure or an object, given "%s"', var_export($arg1, true)));
+            throw new UnexpectedTypeException($arg1, 'closure or object');
         }
     }
 
@@ -72,9 +76,9 @@ class AlterationTransformer implements TransformerInterface, LoggableInterface, 
         return $this;
     }
 
-    public function transform($data, \Knp\ETL\ContextInterface $context)
+    public function transform($data, ContextInterface $context)
     {
-        
+        return $data;
     }
 
 }
