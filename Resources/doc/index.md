@@ -9,6 +9,7 @@ Usage Documentation
 * [First data table](simpleConfig.md)
 * [More Advanced data table](advancedConfig.md)
 * [Arguments](arguments.md)
+* [Events](event.md)
 * [FlamingoQueueCommand](flamingo.md)
 
 Developer Documentation

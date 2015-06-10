@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Earls\OxPeckerDataBundle\Definition\DataConfigurationInterface;
 use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
+use Earls\OxPeckerDataBundle\Dispatcher\RunCommandEvent;
 
 /**
  * Earls\OxPeckerDataBundle\Command\RunCommand
@@ -64,16 +65,16 @@ class RunCommand extends AdvancedCommand
             if ($dataTierConfigOptions['activate-flamingo']) {
                 $this->getLogger()->notice("An error happened: " . $e->getMessage());
                 $this->getLogger()->notice($e->getTraceAsString());
-                $this->stopScript($dataTierConfig, $errorSignal);
+                $this->stopScript($dataTierConfig, $errorSignal, $input->getArgument('namedatatier'), $args);
                 throw $e;
-            } else {                
-                $this->stopScript($dataTierConfig, $errorSignal);
+            } else {
+                $this->stopScript($dataTierConfig, $errorSignal, $input->getArgument('namedatatier'), $args);
                 throw $e;
             }
             $errorSignal = true;
         }
         //log system
-        $this->stopScript($dataTierConfig, $errorSignal);
+        $this->stopScript($dataTierConfig, $errorSignal, $input->getArgument('namedatatier'), $args);
 
         return true;
     }
@@ -106,7 +107,7 @@ class RunCommand extends AdvancedCommand
         }
     }
 
-    protected function stopScript(DataConfigurationInterface $dataTierConfig, $errorSignal = false)
+    protected function stopScript(DataConfigurationInterface $dataTierConfig, $errorSignal, $name, $args)
     {
         $this->setEndTime();
         $this->noticeTime();
@@ -114,14 +115,24 @@ class RunCommand extends AdvancedCommand
 
         //run flamingo only if activate
         if ($dataTierConfigOptions['activate-flamingo']) {
+            $dispatcher = $this->getContainer()->get('event_dispatcher');
             if ($errorSignal) {
                 $status = FlgScriptStatus::STATE_FAILED;
+
+                $event = new RunCommandEvent($name, $args);
+                $dispatcher->dispatch('run_command.failed', $event);
             } else {
                 $status = FlgScriptStatus::STATE_FINISHED;
+
+                $event = new RunCommandEvent($name, $args);
+                $dispatcher->dispatch('run_command.success', $event);
             }
             //stop timer and log all information in database
             $this->cmdManager->stop($this->getLogs(), $status);
         }
+
+        $event = new RunCommandEvent($name, $args);
+        $dispatcher->dispatch('run_command.stop', $event);
     }
 
     /**
