@@ -166,7 +166,7 @@ class DataSourceManager
         $sqlRowCount = "SELECT ROW_COUNT() as count";
         $stmt = $connection->query($sqlRowCount);
         $result = $stmt->fetch();
-        $this->getLogger()->notice("{$result['count']} row inserted -- Comment: {$commentMessage}");
+        $this->getLogger()->notice("{$result['count']} row inserted" . ($commentMessage ? " -- Comment: {$commentMessage}" : null));
     }
 
     protected function createDerivedAliases($entityName, $query)
