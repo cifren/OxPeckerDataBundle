@@ -1,5 +1,3 @@
-Arguments
-=========
 In your config you can create a function `setParamsMapping()`.
 
 This will help you to define better your arguments.

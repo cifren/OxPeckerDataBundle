@@ -1,6 +1,3 @@
-Flamingo usage
-==============
-
 For more information about Flamingo you can go on the documentation 
 [FlamingoCommandQueue](https://github.com/Earls/FlamingoCommandQueue/blob/master/README.md)
 

@@ -1,9 +1,4 @@
-Dev Documentation
-=================
-
 Here some explanation about the tool
-
-
 
 Override
 ========

@@ -1,6 +1,3 @@
-Your first report table
-=================
-
 Here a simple example of `report table` creation. 
 
 In this Example, we will display an ingredient list (this example is really basic but can be replicate on more complicated case.

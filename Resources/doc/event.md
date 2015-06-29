@@ -1,6 +1,3 @@
-Event
-=====
-
 3 events are available, but only 1 if you don't use Flamingo
 
 For more information see [Symfony2 Event/listener](http://symfony.com/doc/current/cookbook/doctrine/event_listeners_subscribers.html), "How to Register Event Listeners and Subscribers".

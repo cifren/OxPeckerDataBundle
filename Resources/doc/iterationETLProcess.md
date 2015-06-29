@@ -1,6 +1,3 @@
-Iteration ETL Process
-=====================
-
 ```php
 
         $extractor = new ORMExtractor($qb, $this->getEntityManager());

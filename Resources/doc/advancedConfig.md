@@ -1,6 +1,3 @@
-Advanced usage
-==============
-
 This Example will show a complete example of OxPeckerData.
 
 Your config :

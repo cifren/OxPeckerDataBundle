@@ -1,6 +1,3 @@
-Overview
-========
-
 This Symfony2 bundle aims to provide commands to build your own report data, simply, 
 organized and quickly. It can as well be used for importing data from one system to another.
 
