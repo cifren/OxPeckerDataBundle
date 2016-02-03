@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.3", 
-        "knplabs/etl": "0.1.*@dev"
+        "knplabs/etl": "1.1.*"
     },
     "autoload":     {
         "psr-0": { "Earls\\OxPeckerDataBundle": "" }
