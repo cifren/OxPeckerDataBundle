@@ -1,5 +1,0 @@
-_assetic:
-    resource: .
-    type: assetic
-_app:
-    resource: /home/ubuntu/workspace/vendor/earls/rhino-report-bundle/Earls/RhinoReportBundle/Tests/FunctionalTests/config/routing.yml
