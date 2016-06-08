@@ -1,6 +1,6 @@
 <?php
 
-namespace Earls\EarlsOxPeckerDataBundle\Tests\FunctionalTests\Model;
+namespace Earls\OxPeckerDataBundle\Tests\FunctionalTests\Model;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * Earls\EarlsOxPeckerDataBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase
+ * Earls\OxPeckerDataBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase
  **/
 abstract class FixtureAwareTestCase extends WebTestCase
 {

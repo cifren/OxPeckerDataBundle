@@ -3,7 +3,7 @@
 namespace Earls\EarlsOxPeckerDataBundle\Tests\FunctionalTests\Tests\DefaultTest;
 
 use Doctrine\Common\Collections\Collection;
-use Earls\EarlsOxPeckerDataBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase;
+use Earls\OxPeckerDataBundle\Tests\FunctionalTests\Model\FixtureAwareTestCase;
 
 /**
  * Default test
