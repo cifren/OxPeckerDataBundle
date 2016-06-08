@@ -14,11 +14,18 @@
     ],
     "require": {
         "php": ">=5.3.3", 
-        "knplabs/etl": "1.1.*"
+        "knplabs/etl": "1.1.*",
+        "earls/flamingo-command-queue-bundle": "dev-master"
     },
     "autoload":     {
         "psr-0": { "Earls\\OxPeckerDataBundle": "" }
     },
     "minimum-stability": "dev",
-    "target-dir": "Earls/OxPeckerDataBundle"
+    "target-dir": "Earls/OxPeckerDataBundle",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cifren/FlamingoCommandQueue.git"
+        }
+    ]
 }
