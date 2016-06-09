@@ -11,34 +11,28 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 
 class IterationETLProcess implements ETLProcessInterface, LoggableInterface
 {
-
     /**
-     *
-     * @var ContextInterface 
+     * @var ContextInterface
      */
     protected $context;
 
     /**
-     *
-     * @var ExtractorInterface 
+     * @var ExtractorInterface
      */
     protected $extractor;
 
     /**
-     *
-     * @var TransformerInterface 
+     * @var TransformerInterface
      */
     protected $transformers;
 
     /**
-     *
-     * @var LoaderInterface 
+     * @var LoaderInterface
      */
     protected $loader;
 
     /**
-     *
-     * @var LoggerInterface 
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -64,17 +58,18 @@ class IterationETLProcess implements ETLProcessInterface, LoggableInterface
 
         $i = 0;
         if (!$extractor) {
-            $this->logger->notice("No Extractor");
+            $this->logger->notice('No Extractor');
+
             return null;
         }
 
         if (null !== $this->logger) {
-            $this->logger->notice("Start Iteration ETL Process");
+            $this->logger->notice('Start Iteration ETL Process');
         }
 
         if (null !== $this->logger) {
             $countItems = $extractor->getCount();
-            $this->logger->notice(sprintf("Will extract %d items", $countItems));
+            $this->logger->notice(sprintf('Will extract %d items', $countItems));
         }
 
         while (null !== $input = $extractor->extract($this->getContext())) {
@@ -85,11 +80,11 @@ class IterationETLProcess implements ETLProcessInterface, LoggableInterface
                 }
             }
             $loader->load($input, $context);
-            $i++;
+            ++$i;
         }
 
         if (null !== $this->logger) {
-            $this->logger->notice(sprintf("ETL executed on %d items", $i));
+            $this->logger->notice(sprintf('ETL executed on %d items', $i));
         }
 
         $loader->flush($context);
@@ -118,24 +113,28 @@ class IterationETLProcess implements ETLProcessInterface, LoggableInterface
     public function setLoader(LoaderInterface $loader)
     {
         $this->loader = $loader;
+
         return $this;
     }
 
     public function setExtractor(ExtractorInterface $extractor)
     {
         $this->extractor = $extractor;
+
         return $this;
     }
 
     public function setTransformers(TransformerInterface $transformers)
     {
         $this->transformers = $transformers;
+
         return $this;
     }
 
     public function setContext(ContextInterface $context)
     {
         $this->context = $context;
+
         return $this;
     }
 
@@ -154,5 +153,4 @@ class IterationETLProcess implements ETLProcessInterface, LoggableInterface
 
         return $this;
     }
-
 }

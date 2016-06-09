@@ -15,30 +15,27 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
  */
 
 /**
- * Description of AlterationTransformerInterface
+ * Description of AlterationTransformerInterface.
  *
  * @author cifren
  */
 class AlterationTransformer implements TransformerInterface, LoggableInterface
 {
-
     /**
-     *
      * @var mixed
      */
     protected $transformerFunction;
 
     /**
-     *
      * @var array
      */
     protected $args;
 
     /**
-     * 
      * @param mixed $arg1 can be a closure or a class
      * @param mixed $arg2 can be an array of arguments or a method name
      * @param array $arg3 will be an array of arguments
+     *
      * @throws \Exception
      */
     public function __construct($arg1, $arg2 = null, $arg3 = null)
@@ -56,7 +53,6 @@ class AlterationTransformer implements TransformerInterface, LoggableInterface
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -65,8 +61,8 @@ class AlterationTransformer implements TransformerInterface, LoggableInterface
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -80,5 +76,4 @@ class AlterationTransformer implements TransformerInterface, LoggableInterface
     {
         return $data;
     }
-
 }

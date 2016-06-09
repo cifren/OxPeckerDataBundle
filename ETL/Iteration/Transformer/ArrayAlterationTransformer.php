@@ -7,12 +7,11 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 class ArrayAlterationTransformer extends AlterationTransformer
 {
-
     protected $transformerFunction;
 
     public function transform($array, ContextInterface $context)
     {
-        if(!is_array($array)){
+        if (!is_array($array)) {
             throw new UnexpectedTypeException($array, 'array');
         }
         $args = array_merge(array($array), $this->args);
@@ -20,5 +19,4 @@ class ArrayAlterationTransformer extends AlterationTransformer
 
         return $arrayTransformed;
     }
-
 }

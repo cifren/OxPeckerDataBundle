@@ -15,7 +15,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-            
+
             new Earls\OxPeckerDataBundle\EarlsOxPeckerDataBundle(),
             new Earls\FlamingoCommandQueueBundle\EarlsFlamingoCommandQueueBundle(),
         ];
@@ -44,6 +44,6 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir().'/config_'.$this->getEnvironment().'.yml');
     }
 }

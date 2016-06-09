@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 
 class SqlETLProcess implements ETLProcessInterface
 {
-
     protected $context;
     protected $datasource;
     protected $logger;
@@ -33,6 +32,7 @@ class SqlETLProcess implements ETLProcessInterface
     public function setContext(ContextInterface $context)
     {
         $this->context = $context;
+
         return $this;
     }
 
@@ -54,17 +54,17 @@ class SqlETLProcess implements ETLProcessInterface
 
     public function getDatasourceManager()
     {
-        if(!$this->datasourceManager){
-            throw new \Exception("Did you setDatasourceManager() ?");
+        if (!$this->datasourceManager) {
+            throw new \Exception('Did you setDatasourceManager() ?');
         }
+
         return $this->datasourceManager;
     }
 
     public function setDatasourceManager(DataSourceManager $datasourceManager)
     {
         $this->datasourceManager = $datasourceManager;
-        
+
         return $this;
     }
-
 }

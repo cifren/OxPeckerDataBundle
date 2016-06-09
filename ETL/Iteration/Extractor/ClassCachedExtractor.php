@@ -8,11 +8,10 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Allow the user to add a class function loading in order to get an array of data
+ * Allow the user to add a class function loading in order to get an array of data.
  */
 class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable, LoggableInterface
 {
-
     protected $data;
     protected $aryFunction;
     protected $args;
@@ -94,7 +93,6 @@ class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable,
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -103,8 +101,8 @@ class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable,
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -113,5 +111,4 @@ class ClassCachedExtractor implements ExtractorInterface, \Iterator, \Countable,
 
         return $this;
     }
-
 }

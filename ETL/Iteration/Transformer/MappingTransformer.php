@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class MappingTransformer implements TransformerInterface, LoggableInterface
 {
-
     private $className;
     private $mapper;
 
@@ -22,7 +21,7 @@ class MappingTransformer implements TransformerInterface, LoggableInterface
 
     public function transform($data, ContextInterface $context)
     {
-        $object = new $this->className;
+        $object = new $this->className();
 
         $this->mapper->set($data, $object);
 
@@ -30,7 +29,6 @@ class MappingTransformer implements TransformerInterface, LoggableInterface
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -39,8 +37,8 @@ class MappingTransformer implements TransformerInterface, LoggableInterface
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -49,5 +47,4 @@ class MappingTransformer implements TransformerInterface, LoggableInterface
 
         return $this;
     }
-
 }

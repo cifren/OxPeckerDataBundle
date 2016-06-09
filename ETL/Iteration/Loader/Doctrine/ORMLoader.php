@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 
 class ORMLoader implements LoaderInterface, LoggableInterface
 {
-
     use LoggerAwareTrait;
 
     private $counter = 0;
@@ -32,7 +31,7 @@ class ORMLoader implements LoaderInterface, LoggableInterface
         }
 
         $this->entityManager->persist($entity);
-        $this->counter++;
+        ++$this->counter;
 
         if ($this->counter % $this->flushEvery === 0) {
             $this->flush($context);
@@ -60,7 +59,6 @@ class ORMLoader implements LoaderInterface, LoggableInterface
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -69,8 +67,8 @@ class ORMLoader implements LoaderInterface, LoggableInterface
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -79,5 +77,4 @@ class ORMLoader implements LoaderInterface, LoggableInterface
 
         return $this;
     }
-
 }

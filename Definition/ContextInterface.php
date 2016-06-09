@@ -6,14 +6,12 @@ use Knp\ETL\ContextInterface as baseContextInterface;
 
 interface ContextInterface extends baseContextInterface
 {
-
     /**
      * @return array
      */
     public function getArgs();
 
     /**
-     * 
      * @param array $args
      */
     public function setArgs(array $args);
@@ -24,7 +22,6 @@ interface ContextInterface extends baseContextInterface
     public function getEtlProcesses();
 
     /**
-     * 
      * @param array $etlProcesses
      */
     public function setEtlProcesses(array $etlProcesses);

@@ -8,25 +8,22 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Earls\OxPeckerDataBundle\ETL\Extractor\Doctrine\ORMEXtractor
+ * Earls\OxPeckerDataBundle\ETL\Extractor\Doctrine\ORMEXtractor.
  */
 class ORMExtractor extends BaseExtractor implements LoggableInterface
 {
-
     /**
-     *
-     * @var \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder 
+     * @var \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder
      */
     protected $query;
-    
+
     /**
-     *
-     * @var int 
+     * @var int
      */
     protected $count;
 
     /**
-     * Could be a Query or a QueryBuilder
+     * Could be a Query or a QueryBuilder.
      */
     public function __construct($query)
     {
@@ -37,10 +34,11 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * Seems to have a bug in Knp Bundle, correctif here
-     * 
+     * Seems to have a bug in Knp Bundle, correctif here.
+     *
      * @param \Knp\ETL\ContextInterface $context
-     * @return \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder 
+     *
+     * @return \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder
      */
     public function extract(ContextInterface $context)
     {
@@ -50,7 +48,6 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * 
      * @return type
      */
     public function getQuery()
@@ -63,7 +60,6 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -72,8 +68,8 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -91,5 +87,4 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
 
         return $this->count;
     }
-
 }

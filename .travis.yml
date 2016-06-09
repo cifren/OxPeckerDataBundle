@@ -3,14 +3,18 @@ language:
     - php
 php:
     - "5.5"
+    
 before_script:
+    #coverage needs xdebug
+    #- phpenv config-rm xdebug.ini
     - composer install
-env:
-    - ACTION="composer run lint"
   
 script:
-    - $ACTION
+    - composer run lint
+    - composer run test_build
+    - composer run test
+    - composer run coverall
     
 notifications:
-  email:
-    -  cifren@msn.com
+    email:
+        -  cifren@msn.com

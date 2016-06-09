@@ -10,13 +10,11 @@ use Earls\FlamingoCommandQueueBundle\Model\FlgScriptStatus;
 use Earls\OxPeckerDataBundle\Dispatcher\RunCommandEvent;
 
 /**
- * Earls\OxPeckerDataBundle\Command\RunCommand
+ * Earls\OxPeckerDataBundle\Command\RunCommand.
  */
 class RunCommand extends AdvancedCommand
 {
-
     /**
-     *
      * @var \Earls\FlamingoCommandQueueBundle\Model\CommandManagerInstance
      */
     protected $cmdManager;
@@ -63,7 +61,7 @@ class RunCommand extends AdvancedCommand
         } catch (\Exception $e) {
             $dataTierConfigOptions = $dataTierConfig->getOptions();
             if ($dataTierConfigOptions['activate-flamingo']) {
-                $this->getLogger()->notice("An error happened: " . $e->getMessage());
+                $this->getLogger()->notice('An error happened: '.$e->getMessage());
                 $this->getLogger()->notice($e->getTraceAsString());
                 $this->stopScript($dataTierConfig, $errorSignal, $input->getArgument('namedatatier'), $args);
                 throw $e;
@@ -82,7 +80,7 @@ class RunCommand extends AdvancedCommand
     protected function startScript(DataConfigurationInterface $dataTierConfig, $name, array $args)
     {
         $this->setStartTime();
-        $this->getLogger()->notice("Arguments: " . $this->getImplodeArguments($args));
+        $this->getLogger()->notice('Arguments: '.$this->getImplodeArguments($args));
         $dataTierConfigOptions = $dataTierConfig->getOptions();
 
         //run flamingo only if activate
@@ -136,7 +134,7 @@ class RunCommand extends AdvancedCommand
     }
 
     /**
-     * Explicit arguments for a selected config,
+     * Explicit arguments for a selected config,.
      *
      * @param string          $name
      * @param array|null      $mapping
@@ -146,42 +144,43 @@ class RunCommand extends AdvancedCommand
     {
         $parameterArgumentMessages = array();
         if (!is_array($mapping)) {
-            $parametersUsage = "[]";
+            $parametersUsage = '[]';
             $parameterArgumentMessages[]['column1'] = 'No information are available';
         } elseif (count($mapping) <= 0) {
             $parametersUsage = null;
             $parameterArgumentMessages[]['column1'] = 'No arguments are allow';
         } else {
-            $msgParametersUsage = implode('=string ', array_keys($mapping)) . '=string';
+            $msgParametersUsage = implode('=string ', array_keys($mapping)).'=string';
             $i = 0;
             foreach ($mapping as $key => $map) {
                 $parameterArgumentMessages[$i]['column1'] = "<fg=green>$key</fg=green>";
                 $parameterArgumentMessages[$i]['column2'] = $map ? "<fg=yellow>default: $map</fg=yellow>" : null;
-                $i++;
+                ++$i;
             }
         }
 
-        $output->writeln("<fg=yellow>Usage</fg=yellow>");
+        $output->writeln('<fg=yellow>Usage</fg=yellow>');
         $output->writeln(" {$this->getName()} $name $msgParametersUsage");
-        $output->writeln("");
-        $output->writeln("<fg=yellow>Arguments</fg=yellow>");
+        $output->writeln('');
+        $output->writeln('<fg=yellow>Arguments</fg=yellow>');
         foreach ($parameterArgumentMessages as $parameterArgumentMessage) {
             $message = " {$parameterArgumentMessage['column1']}";
-            $message.= isset($parameterArgumentMessage['column2']) ? "      " . $parameterArgumentMessage['column2'] : null;
+            $message .= isset($parameterArgumentMessage['column2']) ? '      '.$parameterArgumentMessage['column2'] : null;
             $output->writeln($message);
         }
-        $output->writeln("");
+        $output->writeln('');
     }
 
     /**
-     * Format arguments in order to contain default from config and return an array of arguments from the input
+     * Format arguments in order to contain default from config and return an array of arguments from the input.
      *
      * If mapping is null, means no arguments required
      * If mapping is an empty array, means no arguments required and throw issue if there is
      * If mapping is an array, system will control each argument, throw issue if argument not in the list come from input
      *
-     * @param  array $mappingArgs
-     * @param  array $args
+     * @param array $mappingArgs
+     * @param array $args
+     *
      * @return array
      *
      * @throws \Exception
@@ -213,8 +212,7 @@ class RunCommand extends AdvancedCommand
     protected function getImplodeArguments(array $input)
     {
         return implode(', ', array_map(function ($v, $k) {
-                    return sprintf("%s='%s'", $k, $v);
-                }, $input, array_keys($input)));
+            return sprintf("%s='%s'", $k, $v);
+        }, $input, array_keys($input)));
     }
-
 }

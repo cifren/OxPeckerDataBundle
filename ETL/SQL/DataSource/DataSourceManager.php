@@ -2,45 +2,37 @@
 
 namespace Earls\OxPeckerDataBundle\ETL\SQL\DataSource;
 
-use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSource;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Doctrine\ORM\EntityManager;
-use Earls\OxPeckerDataBundle\ETL\SQL\DataSource\ORMDataSourceType;
 
 class DataSourceManager
 {
-
     /**
-     *
-     * @var EntityManager 
+     * @var EntityManager
      */
     protected $entityManager;
 
     /**
-     *
-     * @var LoggerInterface 
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     *
-     * @var type 
+     * @var type
      */
     protected $uniqueId;
 
     /**
-     *
-     * @var type 
+     * @var type
      */
     protected $derivedAliases = array();
 
     /**
-     *
-     * @var type 
+     * @var type
      */
     protected $temporaryTableNames = array();
 
@@ -52,8 +44,8 @@ class DataSourceManager
     }
 
     /**
-     * createTableFromDataSource
-     * 
+     * createTableFromDataSource.
+     *
      * @param \Earls\OxPeckerDataBundle\DataSource\ORMDataSource $dataSource
      */
     public function processDataSource(ORMDataSource $dataSource)
@@ -75,8 +67,8 @@ class DataSourceManager
     }
 
     /**
-     * dropTable
-     * 
+     * dropTable.
+     *
      * @param string $entityName
      */
     public function dropTable($entityName)
@@ -100,8 +92,8 @@ class DataSourceManager
     }
 
     /**
-     * createTable
-     * 
+     * createTable.
+     *
      * @param string $entityName
      */
     public function createTable($entityName, $temporary = false)
@@ -111,7 +103,7 @@ class DataSourceManager
         if ($temporary) {
             //create temporary and unique name
             $originTableName = $classMetaData->getTableName();
-            $newTableName = $originTableName . $this->uniqueId;
+            $newTableName = $originTableName.$this->uniqueId;
             $classMetaData->setTableName($newTableName);
 
             //store information
@@ -132,18 +124,18 @@ class DataSourceManager
         try {
             $conn = $this->getEntityManager()->getConnection();
             $conn->executeQuery($sql);
-            $this->getLogger()->notice("Create " . (!$temporary? : 'Temporary') . " Table $entityName");
+            $this->getLogger()->notice('Create '.(!$temporary ?: 'Temporary')." Table $entityName");
         } catch (\Exception $e) {
             $this->getLogger()->debug("Catch Exception {$e->getMessage()}");
         }
     }
 
     /**
-     * insertTable
-     * 
-     * @param string $entityName
+     * insertTable.
+     *
+     * @param string                    $entityName
      * @param string|Query|QueryBuilder $query
-     * @param array $mapping
+     * @param array                     $mapping
      */
     public function insertTable($entityName, $query, array $mapping, $commentMessage)
     {
@@ -163,27 +155,27 @@ class DataSourceManager
         $sql = "INSERT INTO {$classMetadata->getTableName()} ($fieldsString) ({$sqlSelect})";
 
         $connection->query($sql);
-        $sqlRowCount = "SELECT ROW_COUNT() as count";
+        $sqlRowCount = 'SELECT ROW_COUNT() as count';
         $stmt = $connection->query($sqlRowCount);
         $result = $stmt->fetch();
-        $this->getLogger()->notice("{$result['count']} row inserted" . ($commentMessage ? " -- Comment: {$commentMessage}" : null));
+        $this->getLogger()->notice("{$result['count']} row inserted".($commentMessage ? " -- Comment: {$commentMessage}" : null));
     }
 
     protected function createDerivedAliases($entityName, $query)
     {
-        if (preg_match('/' . ORMDataSource::DERIVED_ALIAS . '/', $entityName) != true) {
-            throw new \Exception("The entityName '{$entityName}' should contain '" . ORMDataSource::DERIVED_ALIAS . "' at the beginning of the name");
+        if (preg_match('/'.ORMDataSource::DERIVED_ALIAS.'/', $entityName) != true) {
+            throw new \Exception("The entityName '{$entityName}' should contain '".ORMDataSource::DERIVED_ALIAS."' at the beginning of the name");
         }
 
         $this->derivedAliases[$entityName] = $query;
     }
 
     /**
-     * Get Column Name from the table giving targetfield from the entity
-     * 
+     * Get Column Name from the table giving targetfield from the entity.
+     *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $classMetadata
-     * @param string $targetField
-     * 
+     * @param string                              $targetField
+     *
      * @return string
      */
     public function getColumnName(ClassMetadata $classMetadata, $targetField)
@@ -198,8 +190,8 @@ class DataSourceManager
     }
 
     /**
-     * getEntityManager
-     * 
+     * getEntityManager.
+     *
      * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
@@ -208,20 +200,22 @@ class DataSourceManager
     }
 
     /**
-     * 
      * @param \Doctrine\ORM\EntityManager $entityManager
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\DataSourceManager
      */
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+
         return $this;
     }
 
     /**
-     * getSql
-     * 
+     * getSql.
+     *
      * @param string|Query|QueryBuilder $query
+     *
      * @return string
      */
     protected function getSql($query)
@@ -240,7 +234,7 @@ class DataSourceManager
         }
 
         //apply table name from entity for temporary table
-        if ($isSqlQuery && preg_match_all("/%[^%]*%/", $sql, $matches)) {
+        if ($isSqlQuery && preg_match_all('/%[^%]*%/', $sql, $matches)) {
             foreach ($matches[0] as $match) {
                 if (isset($this->temporaryTableNames[substr($match, 1, -1)])) {
                     $sql = str_replace($match, $this->temporaryTableNames[substr($match, 1, -1)]['new'], $sql);
@@ -249,10 +243,10 @@ class DataSourceManager
         }
 
         //replace derived alias by sql statement
-        if (preg_match_all("/%" . ORMDataSource::DERIVED_ALIAS . "[^%]*%/", $sql, $matches)) {
+        if (preg_match_all('/%'.ORMDataSource::DERIVED_ALIAS.'[^%]*%/', $sql, $matches)) {
             foreach ($matches[0] as $match) {
                 if (isset($this->derivedAliases[substr($match, 1, -1)])) {
-                    $sql = str_replace($match, "(" . $this->derivedAliases[substr($match, 1, -1)] . ")", $sql);
+                    $sql = str_replace($match, '('.$this->derivedAliases[substr($match, 1, -1)].')', $sql);
                 }
             }
         }
@@ -261,9 +255,10 @@ class DataSourceManager
     }
 
     /**
-     * getLogger
-     * 
+     * getLogger.
+     *
      * @return \Symfony\Bridge\Monolog\Logger
+     *
      * @throws \Exception
      */
     public function getLogger()
@@ -276,9 +271,10 @@ class DataSourceManager
     }
 
     /**
-     * setLogger
-     * 
+     * setLogger.
+     *
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\DataSourceManager
      */
     public function setLogger(LoggerInterface $logger)
@@ -311,5 +307,4 @@ class DataSourceManager
         $this->derivedAliases = array();
         $this->uniqueId = uniqid();
     }
-
 }

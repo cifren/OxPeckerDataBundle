@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface;
 
 interface ETLProcessInterface
 {
-
     public function process();
 
     public function getContext();

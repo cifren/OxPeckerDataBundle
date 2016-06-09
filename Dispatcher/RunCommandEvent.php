@@ -5,13 +5,12 @@ namespace Earls\OxPeckerDataBundle\Dispatcher;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Description of RunCommandEvent
+ * Description of RunCommandEvent.
  *
- * @author Le Coq Francis 
+ * @author Le Coq Francis
  */
 class RunCommandEvent extends Event
 {
-
     protected $name;
     protected $args;
 
@@ -30,5 +29,4 @@ class RunCommandEvent extends Event
     {
         return $this->args;
     }
-
 }

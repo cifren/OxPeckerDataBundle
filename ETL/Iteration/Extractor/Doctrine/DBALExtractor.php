@@ -8,16 +8,15 @@ use Earls\OxPeckerDataBundle\ETL\Iteration\LoggableInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Earls\OxPeckerDataBundle\ETL\Extractor\Doctrine\ORMEXtractor
+ * Earls\OxPeckerDataBundle\ETL\Extractor\Doctrine\ORMEXtractor.
  */
-class ORMExtractor extends BaseExtractor implements LoggableInterface
+class DBALExtractor extends BaseExtractor implements LoggableInterface
 {
-
     protected $query;
     protected $em;
 
     /**
-     * Could be a Query or a QueryBuilder
+     * Could be a Query or a QueryBuilder.
      */
     public function __construct($query, $em)
     {
@@ -30,9 +29,10 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * Seems to have a bug in Knp Bundle, correctif here
-     * 
+     * Seems to have a bug in Knp Bundle, correctif here.
+     *
      * @param \Knp\ETL\ContextInterface $context
+     *
      * @return type
      */
     public function extract(ContextInterface $context)
@@ -56,7 +56,6 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * 
      * @return LoggerInterface
      */
     public function getLogger()
@@ -65,8 +64,8 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
     }
 
     /**
-     * 
      * @param LoggerInterface $logger
+     *
      * @return \Earls\OxPeckerDataBundle\ETL\Iteration\Transformer\ObjectAlterationTransformer
      */
     public function setLogger(LoggerInterface $logger)
@@ -75,5 +74,4 @@ class ORMExtractor extends BaseExtractor implements LoggableInterface
 
         return $this;
     }
-
 }

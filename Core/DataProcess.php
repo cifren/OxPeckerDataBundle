@@ -12,32 +12,27 @@ use Earls\OxPeckerDataBundle\ETL\Core\SqlETLProcess;
 use Earls\FlamingoCommandQueueBundle\Model\StopwatchInterface;
 
 /**
- * Earls\OxPeckerDataBundle\Core\DataProcess
+ * Earls\OxPeckerDataBundle\Core\DataProcess.
  */
 class DataProcess
 {
-
     /**
-     *
-     * @var EntityManager 
+     * @var EntityManager
      */
     protected $entityManager;
 
     /**
-     *
-     * @var Logger 
+     * @var Logger
      */
     protected $logger;
 
     /**
-     *
-     * @var DataSourceManager 
+     * @var DataSourceManager
      */
     protected $dataSourceManager;
 
     /**
-     *
-     * @var StopwatchInterface 
+     * @var StopwatchInterface
      */
     protected $stopWatch;
 
@@ -50,16 +45,16 @@ class DataProcess
     }
 
     /**
-     * Process the data based on the configuration
-     * 
+     * Process the data based on the configuration.
+     *
      * @param \Earls\OxPeckerDataBundle\Definition\DataConfigurationInterface $config
-     * @param array $params
+     * @param array                                                           $params
      */
     public function process(DataConfigurationInterface $config, array $params)
     {
         $dataProcessContext = $this->createContext($params);
 
-        $this->getLogger()->notice("PreProcess");
+        $this->getLogger()->notice('PreProcess');
 
         $this->stopWatch->start('preProcess');
         $config->preProcess($dataProcessContext);
@@ -72,11 +67,11 @@ class DataProcess
         $etlProcesses = $config->getETLProcesses($dataProcessContext);
         $dataProcessContext->setEtlProcesses($etlProcesses);
 
-        $this->getLogger()->notice("Execute ETL Processes");
+        $this->getLogger()->notice('Execute ETL Processes');
 
         $this->executeETLProcesses($etlProcesses);
 
-        $this->getLogger()->notice("PostProcess");
+        $this->getLogger()->notice('PostProcess');
         $this->stopWatch->start('postProcess');
         $config->postProcess($dataProcessContext);
         $this->stopWatch->stop('postProcess');
@@ -84,8 +79,8 @@ class DataProcess
     }
 
     /**
-     * Execute ETL processes
-     * 
+     * Execute ETL processes.
+     *
      * @param array $etlProcesses
      */
     protected function executeETLProcesses(array $etlProcesses)
@@ -108,9 +103,10 @@ class DataProcess
     }
 
     /**
-     * setEntityManager
-     * 
+     * setEntityManager.
+     *
      * @param \Doctrine\ORM\EntityManager $entityManager
+     *
      * @return \Earls\OxPeckerDataBundle\Core\DataProcess
      */
     public function setEntityManager(EntityManager $entityManager)
@@ -121,8 +117,8 @@ class DataProcess
     }
 
     /**
-     * getEntityManager
-     * 
+     * getEntityManager.
+     *
      * @return EntityManager
      */
     public function getEntityManager()
@@ -131,9 +127,10 @@ class DataProcess
     }
 
     /**
-     * createContext
-     * 
+     * createContext.
+     *
      * @param array $params
+     *
      * @return DataProcessContext
      */
     protected function createContext(array $params)
@@ -144,9 +141,10 @@ class DataProcess
     }
 
     /**
-     * getLogger
-     * 
+     * getLogger.
+     *
      * @return \Symfony\Bridge\Monolog\Logger
+     *
      * @throws \Exception
      */
     public function getLogger()
@@ -159,9 +157,10 @@ class DataProcess
     }
 
     /**
-     * setLogger
-     * 
+     * setLogger.
+     *
      * @param Logger $logger
+     *
      * @return \Earls\OxPeckerDataBundle\Core\DataProcess
      */
     public function setLogger(Logger $logger)
@@ -172,8 +171,8 @@ class DataProcess
     }
 
     /**
-     * 
      * @param \Earls\OxPeckerDataBundle\ETL\SQL\DataSource\DataSourceManager $datasourceManager
+     *
      * @return \Earls\OxPeckerDataBundle\Core\DataProcess
      */
     public function setDatasourceManager(DataSourceManager $datasourceManager)
@@ -184,8 +183,8 @@ class DataProcess
     }
 
     /**
-     * 
-     * @return DataSourceManager 
+     * @return DataSourceManager
+     *
      * @throws \Exception
      */
     public function getDatasourceManager()
@@ -197,5 +196,4 @@ class DataProcess
 
         return $this->dataSourceManager;
     }
-
 }

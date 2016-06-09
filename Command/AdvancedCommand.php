@@ -1,10 +1,8 @@
 <?php
 
 /**
- * 	Class for extend Command for handle errors
- *
+ * 	Class for extend Command for handle errors.
  * */
-
 namespace Earls\OxPeckerDataBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -12,26 +10,22 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 abstract class AdvancedCommand extends ContainerAwareCommand
 {
-
     /**
-     *
-     * @var \Symfony\Bridge\Monolog\Logger 
+     * @var \Symfony\Bridge\Monolog\Logger
      */
     protected $logger;
 
     /**
-     *
-     * @var \Symfony\Component\Stopwatch\Stopwatch 
+     * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     protected $stopWatch;
 
     /**
-     * 
      * @return \Symfony\Component\Stopwatch\Stopwatch
      */
     protected function getStopWatch()
     {
-        if($this->getContainer()->has('debug.stopwatch') === FALSE){
+        if ($this->getContainer()->has('debug.stopwatch') === false) {
             $this->getContainer()->set('debug.stopwatch', new Stopwatch());
         }
 
@@ -39,7 +33,6 @@ abstract class AdvancedCommand extends ContainerAwareCommand
     }
 
     /**
-     * 
      * @return \Symfony\Bridge\Monolog\Logger
      */
     protected function getLogger()
@@ -48,7 +41,6 @@ abstract class AdvancedCommand extends ContainerAwareCommand
     }
 
     /**
-     * 
      * @param string $id
      */
     protected function setStartTime($id = 'main')
@@ -57,7 +49,6 @@ abstract class AdvancedCommand extends ContainerAwareCommand
     }
 
     /**
-     * 
      * @param string $id
      */
     protected function setEndTime($id = 'main')
@@ -66,8 +57,8 @@ abstract class AdvancedCommand extends ContainerAwareCommand
     }
 
     /**
-     * 
      * @param string $id
+     *
      * @return \DateInterval
      */
     protected function getFinishTime($id = 'main')
@@ -88,5 +79,4 @@ abstract class AdvancedCommand extends ContainerAwareCommand
         $message = "The script lasted {$this->getFinishTime($id)->format('%h Hours %i Minutes %s Seconds')}";
         $this->getLogger()->notice($message);
     }
-
 }

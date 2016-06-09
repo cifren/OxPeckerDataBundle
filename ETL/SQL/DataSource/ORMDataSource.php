@@ -4,7 +4,6 @@ namespace Earls\OxPeckerDataBundle\ETL\SQL\DataSource;
 
 class ORMDataSource extends DataSource
 {
-
     const DERIVED_ALIAS = 'DerivedDataOx:';
 
     protected $entityName;
@@ -13,16 +12,16 @@ class ORMDataSource extends DataSource
     protected $options = array(
         'dropOnInit' => true,
         'tableType' => ORMDataSourceType::REGULAR_TABLE,
-        'commentMessage' => null
+        'commentMessage' => null,
     );
 
     /**
-     * __construct
-     * 
+     * __construct.
+     *
      * @param string|\Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query
-     * @param string $entityName
-     * @param array $mapping
-     * @param array $options
+     * @param string                                                $entityName
+     * @param array                                                 $mapping
+     * @param array                                                 $options
      */
     public function __construct($query, $entityName, array $mapping, array $options = null)
     {
@@ -35,8 +34,8 @@ class ORMDataSource extends DataSource
     }
 
     /**
-     * getEntityName
-     * 
+     * getEntityName.
+     *
      * @return string
      */
     public function getEntityName()
@@ -45,8 +44,8 @@ class ORMDataSource extends DataSource
     }
 
     /**
-     * getMapping
-     * 
+     * getMapping.
+     *
      * @return array
      */
     public function getMapping()
@@ -55,8 +54,8 @@ class ORMDataSource extends DataSource
     }
 
     /**
-     * getQuery
-     * 
+     * getQuery.
+     *
      * @return string|\Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder
      */
     public function getQuery()
@@ -65,44 +64,50 @@ class ORMDataSource extends DataSource
     }
 
     /**
-     * setEntityName
-     * 
+     * setEntityName.
+     *
      * @param string $entityName
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\ORMDataSource
      */
     public function setEntityName($entityName)
     {
         $this->entityName = $entityName;
+
         return $this;
     }
 
     /**
-     * setMapping
-     * 
+     * setMapping.
+     *
      * @param array $mapping
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\ORMDataSource
      */
     public function setMapping(array $mapping)
     {
         $this->mapping = $mapping;
+
         return $this;
     }
 
     /**
-     * setQuery
-     * 
+     * setQuery.
+     *
      * @param string|\Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\ORMDataSource
      */
     public function setQuery($query)
     {
         $this->query = $query;
+
         return $this;
     }
 
     /**
-     * getOptions
-     * 
+     * getOptions.
+     *
      * @return array
      */
     public function getOptions()
@@ -111,9 +116,10 @@ class ORMDataSource extends DataSource
     }
 
     /**
-     * setOptions
-     * 
+     * setOptions.
+     *
      * @param array $options
+     *
      * @return \Earls\OxPeckerDataBundle\DataSource\ORMDataSource
      */
     public function setOptions(array $options)
@@ -122,5 +128,4 @@ class ORMDataSource extends DataSource
 
         return $this;
     }
-
 }
