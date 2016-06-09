@@ -10,14 +10,14 @@
          backupStaticAttributes="false">
 
     <testsuites>
-        <testsuite name="FlamingoCommandQueue test suite">
+        <testsuite name="OxPeckerData test suite">
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true" processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">./</directory>
             <exclude>
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
