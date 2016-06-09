@@ -23,7 +23,8 @@
     "require-dev": {
         "phpunit/phpunit": "^4.8",
         "friendsofphp/php-cs-fixer": "^1.11",
-        "doctrine/doctrine-fixtures-bundle": "^2.3"
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "satooshi/php-coveralls": "^1.0"
     },
     "autoload":     {
         "psr-0": { "Earls\\OxPeckerDataBundle": "" }
