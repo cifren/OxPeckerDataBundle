@@ -1,3 +1,9 @@
+OxPeckerDataBundle
+============
+
+[![Build Status](https://travis-ci.org/cifren/OxPeckerDataBundle.svg?branch=master)](https://travis-ci.org/cifren/OxPeckerDataBundle)
+[![Coverage Status](https://coveralls.io/repos/github/cifren/OxPeckerDataBundle/badge.svg?branch=master)](https://coveralls.io/github/cifren/OxPeckerDataBundle?branch=master)
+
 This Symfony2 bundle aims to provide commands to build your own report data, simply, 
 organized and quickly. It can as well be used for importing data from one system to another.
 
