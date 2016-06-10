@@ -1,9 +1,9 @@
 <?php
+
 namespace Earls\OxPeckerDataBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Stopwatch\Stopwatch;
-
 
 /**
  * 	Class for extend Command for handle errors.
